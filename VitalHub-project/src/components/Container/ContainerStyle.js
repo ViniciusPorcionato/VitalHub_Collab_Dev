@@ -100,3 +100,10 @@ flex-direction: row;
 margin-bottom: 30px;
 `
 
+export const ContainerCamera = styled.View`
+width: 90%;
+flex-direction: row;
+justify-content: space-evenly;
+padding-left: 60px;
+`
+

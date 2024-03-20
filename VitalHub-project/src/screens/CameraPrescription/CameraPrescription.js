@@ -5,6 +5,8 @@ import { useEffect, useState, useRef } from 'react';
 import { FontAwesome, AntDesign, Ionicons } from '@expo/vector-icons'
 import { Button, ButtonEdit } from '../../components/Button/ButtonStyle';
 import { ButtonTitle } from '../../components/Title/TitleStyle';
+import { MaterialIcons } from '@expo/vector-icons';
+import { ContainerCamera } from '../../components/Container/ContainerStyle';
 
 export const CameraPrescription = ({ navigation }) => {
 
@@ -70,9 +72,9 @@ export const CameraPrescription = ({ navigation }) => {
 
       </Camera>
 
-      <TouchableOpacity style={styles.btnCapture} onPress={() => CapturePhoto()}>
-        <FontAwesome name='camera' size={23} color="#FFF" />
-      </TouchableOpacity>
+      <ContainerCamera>
+
+
 
       <TouchableOpacity
         style={styles.btnFlash}
@@ -81,8 +83,20 @@ export const CameraPrescription = ({ navigation }) => {
           : Camera.Constants.FlashMode.off)}
       >
 
-        <FontAwesome name="flash" size={23} color={"black"} />
+        <FontAwesome name="flash" size={30} color={"black"} />
       </TouchableOpacity>
+
+        <TouchableOpacity style={styles.btnCapture} onPress={() => CapturePhoto()}>
+          <FontAwesome name='camera' size={23} color="#FFF" />
+        </TouchableOpacity>
+      
+        <TouchableOpacity style={styles.btnCancel} onPress={() => navigation.navigate("ViewPrescription")}>
+          <MaterialIcons name="cancel" size={30} color="black" />
+        </TouchableOpacity>
+        
+      </ContainerCamera>
+
+
 
 
       <Modal animationType='slide' transparent={false} visible={openModal}>
@@ -149,6 +163,14 @@ const styles = StyleSheet.create({
     margin: 20,
     borderRadius: 50,
     backgroundColor: "#121212",
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnCancel: {
+    padding: 20,
+    margin: 20,
+    borderRadius: 50,
+    backgroundColor: "transparent",
     justifyContent: 'center',
     alignItems: 'center',
   },
