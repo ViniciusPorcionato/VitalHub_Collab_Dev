@@ -5,15 +5,27 @@ import { Input } from "../../components/Input/Input"
 import { LinkAccount, LinkMedium } from "../../components/Links/Links"
 import { Button, ButtonGoogle } from "../../components/Button/ButtonStyle"
 import { AntDesign } from '@expo/vector-icons';
+import { useState } from "react"
+import api from "../../Service/Service"
 
-export const Login = ({navigation}) => {
+export const Login = ({ navigation }) => {
+
+    const [email, setEmail] = useState('')
+    const [senha, setSenha] = useState('')
 
 
-    async function Login(){
-        navigation.navigate("Main")
+    async function Login() {
+        await api.post('/Login', {
+            email: email,
+            senha: senha
+        }).then( response => {
+            console.log( response )
+        })
+        
+        // navigation.navigate("Main");
     }
 
-    async function LoginMed(){
+    async function LoginMed() {
         navigation.navigate("MainMed")
     }
 
@@ -31,8 +43,8 @@ export const Login = ({navigation}) => {
                 placeholder={'Usuário ou E-mail'}
                 keyboardType={'text'}
                 placeholderTextColor={'#34898F'}
-            // value={fieldValue}
-            // onChangeText={onChangeText}
+                value={email}
+                onChangeText={(txt) => setEmail(txt)}
             />
 
             <Input
@@ -40,12 +52,12 @@ export const Login = ({navigation}) => {
                 keyboardType={'text'}
                 placeholderTextColor={'#34898F'}
                 secureTextEntry={true}
-            // value={fieldValue}
-            // onChangeText={onChangeText}
+                value={senha}
+                onChangeText={(txt) => setSenha(txt)}
             />
 
 
-                <LinkMedium onPress={() => navigation.replace("ForgotPassword")}>Esqueceu sua senha?</LinkMedium>
+            <LinkMedium onPress={() => navigation.replace("ForgotPassword")}>Esqueceu sua senha?</LinkMedium>
 
             <Button onPress={(e) => Login()}>
                 <ButtonTitle>Entrar</ButtonTitle>
