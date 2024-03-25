@@ -8,6 +8,10 @@ import { AntDesign } from '@expo/vector-icons';
 import { useState } from "react"
 import api from "../../Service/Service"
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { userDecodeToken } from "../../Utils/Auth"
+import { ActivityIndicator } from "react-native"
+
 export const Login = ({ navigation }) => {
 
     const [email, setEmail] = useState('')
@@ -18,16 +22,29 @@ export const Login = ({ navigation }) => {
         await api.post('/Login', {
             email: email,
             senha: senha
-        }).then( response => {
-            console.log( response )
+        }).then( async response => {
+            
+            await AsyncStorage.setItem("token", JSON.stringify(response.data))
+
+            const token = await userDecodeToken();
+            if (token.role == "Paciente") {
+
+                navigation.navigate("Main");
+            }else{
+
+                navigation.navigate("MainMed")
+            }
+
+            
+
+        }).catch(error =>{
+
+            console.log(error);
+            
         })
         
-        // navigation.navigate("Main");
     }
 
-    async function LoginMed() {
-        navigation.navigate("MainMed")
-    }
 
 
     return (
