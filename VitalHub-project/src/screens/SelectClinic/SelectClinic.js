@@ -35,8 +35,8 @@ export const SelectClinic = ({navigation}) => {
                         <SelectClinicCard
                             ProfileNameCard={item.nome}
                             textCard={item.local}
-                            rate={item.rate}
-                            openTime={item.data}
+                            // rate={item.rate}
+                            // openTime={item.data}
 
                         />
                     )
