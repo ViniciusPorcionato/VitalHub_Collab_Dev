@@ -88,19 +88,13 @@ export const SelectMedCard = ({
             {/* <ProfileImage source={{ uri: "https://github.com/Guidcampos.png" }} /> */}
 
             <ContentMedCard>
-
                 <DataProfileCard>
-
                     <ProfileName>{ProfileNameCard}</ProfileName>
-
                     <ProfileData>
                         <TextBold>{textCard}</TextBold>
                     </ProfileData>
-
                 </DataProfileCard>
-
             </ContentMedCard>
-
         </ContainerCardList>
 
     )
