@@ -14,6 +14,8 @@ export const UserProfile = ({ navigation, profile = "Paciente" }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
 
+
+
     useEffect(() => {
         profileLoad()
     }, [])

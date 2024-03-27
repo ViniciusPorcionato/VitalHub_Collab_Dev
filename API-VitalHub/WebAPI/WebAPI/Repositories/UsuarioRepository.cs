@@ -25,8 +25,6 @@ namespace WebAPI.Repositories
 
         }
 
-        
-
         public Usuario BuscarPorEmailESenha(string email, string senha)
         {
            // var user = ctx.Usuarios.FirstOrDefault
@@ -68,6 +66,7 @@ namespace WebAPI.Repositories
             usuario.Senha = Criptografia.GerarHash(usuario.Senha);
             ctx.Add(usuario);
             ctx.SaveChanges();
+
         }
     }
 }

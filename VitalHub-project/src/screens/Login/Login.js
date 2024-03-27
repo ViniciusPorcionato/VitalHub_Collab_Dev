@@ -14,38 +14,40 @@ import { ActivityIndicator } from "react-native"
 
 export const Login = ({ navigation }) => {
 
-    const [email, setEmail] = useState('')
-    const [senha, setSenha] = useState('')
+
+    const [email, setEmail] = useState('paciente@email.com');
+    const [senha, setSenha] = useState('paciente123');
+
+    const [isLoaded, setIsLoaded] = useState(false);
 
 
     async function Login() {
+
+        setIsLoaded(true);
+
         await api.post('/Login', {
             email: email,
             senha: senha
-        }).then( async response => {
-            
+        }).then(async response => {
+
             await AsyncStorage.setItem("token", JSON.stringify(response.data))
 
             const token = await userDecodeToken();
             if (token.role == "Paciente") {
 
                 navigation.navigate("Main");
-            }else{
+                setIsLoaded(false);
+            } else {
 
                 navigation.navigate("MainMed")
+                setIsLoaded(false);
             }
-
-            
-
-        }).catch(error =>{
+        }).catch(error => {
 
             console.log(error);
-            
+
         })
-        
     }
-
-
 
     return (
         <Container>
@@ -77,7 +79,9 @@ export const Login = ({ navigation }) => {
             <LinkMedium onPress={() => navigation.replace("ForgotPassword")}>Esqueceu sua senha?</LinkMedium>
 
             <Button onPress={(e) => Login()}>
-                <ButtonTitle>Entrar</ButtonTitle>
+                {isLoaded ? <ActivityIndicator color={"white"} /> : <ButtonTitle>
+                    Entrar
+                </ButtonTitle>}
             </Button>
 
             <ButtonGoogle onPress={(e) => LoginMed()}>
