@@ -33,6 +33,7 @@ export const Login = ({ navigation }) => {
             await AsyncStorage.setItem("token", JSON.stringify(response.data))
 
             const token = await userDecodeToken();
+            
             if (token.role == "Paciente") {
 
                 navigation.navigate("Main");
