@@ -24,6 +24,7 @@ namespace WebAPI.Controllers
         [HttpPut("AlterarSenha")]
         public IActionResult AlterarSenha(AlterarSenhaViewModel senhas)
         {
+
             Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
 
             bool correto = usuarioRepository.AlterarSenha(idUsuario, senhas.SenhaAntiga, senhas.SenhaNova);
