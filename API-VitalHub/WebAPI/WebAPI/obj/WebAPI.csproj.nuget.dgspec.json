@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\47423489824\\Desktop\\VitalHub_Collab_Dev\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {}
+    "C:\\Users\\54750759805\\Desktop\\VitalHub_Collab_Dev\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\47423489824\\Desktop\\VitalHub_Collab_Dev\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {
+    "C:\\Users\\54750759805\\Desktop\\VitalHub_Collab_Dev\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\47423489824\\Desktop\\VitalHub_Collab_Dev\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\54750759805\\Desktop\\VitalHub_Collab_Dev\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
         "projectName": "WebAPI",
-        "projectPath": "C:\\Users\\47423489824\\Desktop\\VitalHub_Collab_Dev\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
-        "packagesPath": "C:\\Users\\47423489824\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\47423489824\\Desktop\\VitalHub_Collab_Dev\\API-VitalHub\\WebAPI\\WebAPI\\obj\\",
+        "projectPath": "C:\\Users\\54750759805\\Desktop\\VitalHub_Collab_Dev\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "packagesPath": "C:\\Users\\54750759805\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\54750759805\\Desktop\\VitalHub_Collab_Dev\\API-VitalHub\\WebAPI\\WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\47423489824\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\54750759805\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
