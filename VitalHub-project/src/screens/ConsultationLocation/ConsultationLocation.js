@@ -9,7 +9,6 @@ import Map from "../../components/Map/Map"
 export const ConsultationLocation = ({navigation}) => {
 
     return (
-
         <Container>
 
             <LocationImage>
