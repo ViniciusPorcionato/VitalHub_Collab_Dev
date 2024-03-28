@@ -19,13 +19,35 @@ export const PatientConsultations = ({navigation}) => {
     const [showModalAppointment, setShowModalAppointment] = useState(false)
     const[showQueryModal, setShowQueryModal] = useState(false)
 
-    const Consultas = [
-        { id: 1, nome: "Vinicius", situacao: "pendente" },
-        { id: 2, nome: "Vinicius", situacao: "realizado" },
-        { id: 3, nome: "Vinicius", situacao: "cancelado" },
-        { id: 4, nome: "Vinicius", situacao: "realizado" },
-        { id: 5, nome: "Vinicius", situacao: "cancelado" }
-    ];
+    //state para receber o array de consultas
+    const [consultas, setConsultas] = useState([]);
+
+        //Criar um useEffect para a chamda da função
+        useEffect(() => {
+
+            //Criar a função para obter a lista de médico da api e setar no state
+            async function getConsultas() {
+                try {
+                    const promise = await api.get("/Pacientes/BuscarPorData")
+    
+                    setConsultas(promise.data)
+    
+                } catch (error) {
+                    console.log("Deu ruim na API !");
+                }
+            }
+
+            getConsultas()
+    
+        }, [])
+
+        const Consultas = [
+            { id: 1, nome: "Vinicius", situacao: "pendente" },
+            { id: 2, nome: "Murilo", situacao: "realizado" },
+            { id: 3, nome: "Carlos", situacao: "cancelado" },
+            { id: 4, nome: "Guilherme", situacao: "realizado" },
+            { id: 5, nome: "Eduardo", situacao: "cancelado" }
+        ];
 
     // state para o estado da lista(card)
     const [statusLista, setStatusLista] = useState("pendente")
@@ -79,7 +101,7 @@ export const PatientConsultations = ({navigation}) => {
                                 onPressCancel={() => setShowModalCancel(true)}
                                 onPressAppointment={() => setShowModalAppointment(true)}
                                 navigation={navigation}
-                                ProfileNameCard = "Dr. Claudio"
+                                ProfileNameCard = {item.nome}
                                 Age = "22 anos"
                                 TipoConsulta = "Rotina"
                             />

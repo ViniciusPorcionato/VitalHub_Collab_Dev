@@ -9,10 +9,11 @@ import { useEffect, useState } from "react"
 import { userDecodeToken } from "../../Utils/Auth"
 
 
-export const UserProfile = ({ navigation, profile = "Paciente" }) => {
+export const UserProfile = ({ navigation }) => {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [role, setRole] = useState('');
 
 
 
@@ -54,8 +55,8 @@ export const UserProfile = ({ navigation, profile = "Paciente" }) => {
 
         setName(token.name)
         setEmail(token.email)
+        setRole(token.role)
     }
-
 
     return (
         <ScrollProfile>
@@ -109,7 +110,7 @@ export const UserProfile = ({ navigation, profile = "Paciente" }) => {
                 </ContainerInput>
 
 
-                <Button onPress={() => navigation.replace(({ profile } == "Paciente") ? "Main" : "MainMed")} >
+                <Button onPress={() => navigation.replace(( role  == "Paciente") ? "Main" : "MainMed")}>
                     <ButtonTitle>Salvar</ButtonTitle>
                 </Button>
 

@@ -30,7 +30,7 @@ export const Login = ({ navigation }) => {
             senha: senha
         }).then(async response => {
 
-            await AsyncStorage.setItem("token", JSON.stringify(response.data))
+            await AsyncStorage.setItem("token", response.data.token)
 
             const token = await userDecodeToken();
             
