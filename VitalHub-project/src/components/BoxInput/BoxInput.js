@@ -3,7 +3,6 @@ import { Label, LabelMedicalRecord } from "../Label/Label"
 import { InputLabelModal } from "../Title/TitleStyle"
 import { FieldContent, FieldContentMedicalRecord } from "./BoxInputStyles"
 
-
 export const BoxInput = ({
     fieldWidth = 100,
     editable = true,
