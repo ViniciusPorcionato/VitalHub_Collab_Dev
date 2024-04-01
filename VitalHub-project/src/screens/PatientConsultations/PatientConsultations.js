@@ -26,10 +26,9 @@ export const PatientConsultations = ({navigation}) => {
         useEffect(() => {
 
             //Criar a função para obter a lista de médico da api e setar no state
-            async function getConsultas() {
+            async function getConsultas(idPaciente, dataConsulta) {
                 try {
-                    const promise = await api.get("/Pacientes/BuscarPorData")
-    
+                    const promise = await api.get(`/Pacientes/BuscarPorData?data=${idPaciente}data=${dataConsulta}`)
                     setConsultas(promise.data)
     
                 } catch (error) {
@@ -37,9 +36,23 @@ export const PatientConsultations = ({navigation}) => {
                 }
             }
 
+            profileLoad()
             getConsultas()
     
         }, [])
+
+        async function profileLoad() {
+
+            const token = await userDecodeToken();
+    
+            if (token) {
+                console.log(token);
+            }
+    
+            setName(token.name)
+            setEmail(token.email)
+            setRole(token.role)
+        }
 
         const Consultas = [
             { id: 1, nome: "Vinicius", situacao: "pendente" },
@@ -59,7 +72,7 @@ export const PatientConsultations = ({navigation}) => {
             navigation={navigation}
             />
 
-            <CalendarHome />
+            <CalendarHome/>
 
             <FilterAppointment>
 

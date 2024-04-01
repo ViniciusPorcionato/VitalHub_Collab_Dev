@@ -42,6 +42,7 @@ export const CalendarHome = () => {
     //define a data final como sendo o último dia do mês
     const endingDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
 
+    
 
     return (
         <StyledCalendarStrip
@@ -77,6 +78,8 @@ export const CalendarHome = () => {
 
             //scroll da barra
             scrollable={true}
+
+            onDateSelected={txt => console.log(txt)}
         />
     );
 

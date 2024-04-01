@@ -72,5 +72,12 @@ namespace WebAPI.Controllers
 
             return Ok(_medicoRepository.ListarPorClinica(id)); ;
         }
+
+
+        [HttpGet("BuscarPorData")]
+        public IActionResult BuscarPorData(DateTime data, Guid id)
+        {
+            return Ok(_medicoRepository.BuscarPorData(data, id));
+        }
     }
 }

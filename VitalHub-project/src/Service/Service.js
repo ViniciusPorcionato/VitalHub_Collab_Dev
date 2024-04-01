@@ -13,7 +13,7 @@ const ipVinicius = '172.16.39.121'
 const ipMurilo = '172.16.39.96'
 
 //Definir a url padrao
-// const apiUrlLocal = `http://${ipVinicius}:${portaApi}/api`
+const apiUrlLocal = `http://${ipVinicius}:${portaApi}/api`
 // const apiUrlLocal = `http://${ipMurilo}:${portaApi}/api` 
 
 //Trazer a configuracao do axios
