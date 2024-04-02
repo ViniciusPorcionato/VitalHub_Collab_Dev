@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { BtnListAppointment } from "../../components/BtnListAppointment/BtnListAppointment"
 import { CalendarHome } from "../../components/Calendar/Calendar"
 import { Container } from "../../components/Container/ContainerStyle"
@@ -11,90 +11,95 @@ import { BtnIcon } from "./Style"
 import { BookModal } from "../../components/BookModal/BookModal"
 import { QueryDoctorModal, QueryModal } from "../../components/QueryModal/QueryModal"
 import { CancellationModal } from "../../components/CancellationModal/CancellationModal"
+import { userDecodeToken } from "../../Utils/Auth"
+import { dateFormatDbToView, functionPrioridade } from "../../Utils/StringFunction"
+import api from "../../Service/Service"
+import moment from "moment"
 
-export const PatientConsultations = ({navigation}) => {
+export const PatientConsultations = ({ navigation }) => {
 
     // state para exibição dos modais 
     const [showModalCancel, setShowModalCancel] = useState(false)
     const [showModalAppointment, setShowModalAppointment] = useState(false)
-    const[showQueryModal, setShowQueryModal] = useState(false)
+    const [showQueryModal, setShowQueryModal] = useState(false)
 
     //state para receber o array de consultas
     const [consultas, setConsultas] = useState([]);
+    const [profile, setProfile] = useState({})
+    const [dataConsulta, setDataConsulta] = useState('')
 
-        //Criar um useEffect para a chamda da função
-        useEffect(() => {
+    async function ProfileLoad() {
 
-            //Criar a função para obter a lista de médico da api e setar no state
-            async function getConsultas(idPaciente, dataConsulta) {
-                try {
-                    const promise = await api.get(`/Pacientes/BuscarPorData?data=${idPaciente}data=${dataConsulta}`)
-                    setConsultas(promise.data)
-    
-                } catch (error) {
-                    console.log("Deu ruim na API !");
-                }
-            }
+        const token = await userDecodeToken();
 
-            profileLoad()
-            getConsultas()
-    
-        }, [])
+        if (token != null) {
+            setProfile(token)
 
-        async function profileLoad() {
-
-            const token = await userDecodeToken();
-    
-            if (token) {
-                console.log(token);
-            }
-    
-            setName(token.name)
-            setEmail(token.email)
-            setRole(token.role)
+            setDataConsulta(moment() .format('YYYY-MM-DD'))
         }
+    }
 
-        const Consultas = [
-            { id: 1, nome: "Vinicius", situacao: "pendente" },
-            { id: 2, nome: "Murilo", situacao: "realizado" },
-            { id: 3, nome: "Carlos", situacao: "cancelado" },
-            { id: 4, nome: "Guilherme", situacao: "realizado" },
-            { id: 5, nome: "Eduardo", situacao: "cancelado" }
-        ];
+
+    async function GetConsultas() {
+
+        //Chamando o metodo da api
+        await api.get(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${profile.id}`
+        ).then(response =>{
+            setConsultas(response.data)
+        }).catch(error => {
+            console.log(error);
+        })
+
+    }
+
+    //Criar um useEffect para a chamda da função
+    useEffect(() => {
+        ProfileLoad();
+    }, [])
+
+    //Criar um useEffect para a chamda da função
+    useEffect(() => {
+        if(dataConsulta != ''){
+            GetConsultas()
+        }
+    }, [dataConsulta])
+
 
     // state para o estado da lista(card)
-    const [statusLista, setStatusLista] = useState("pendente")
+    const [statusLista, setStatusLista] = useState("Agendado")
 
     return (
         <Container>
 
             <HeaderPatient
-            navigation={navigation}
+                navigation={navigation}
             />
 
-            <CalendarHome/>
+            <CalendarHome 
+                setDataConsulta={setDataConsulta}
+            />
 
             <FilterAppointment>
 
                 {/* Agendadas */}
                 <BtnListAppointment
                     textButton={"Agendadas"}
-                    clickButton={statusLista === "pendente"}
-                    onPress={() => setStatusLista("pendente")}
+                    clickButton={statusLista === "Agendado"}
+                    onPress={() => setStatusLista("Agendado")}
                 />
 
                 {/* Realizadas */}
                 <BtnListAppointment
                     textButton={"Realizadas"}
-                    clickButton={statusLista === "realizado"}
-                    onPress={() => setStatusLista("realizado")}
+                    clickButton={statusLista === "Realizado"}
+                    onPress={() => setStatusLista("Realizado")}
                 />
 
                 {/* Canceladas */}
                 <BtnListAppointment
                     textButton={"Canceladas"}
-                    clickButton={statusLista === "cancelado"}
-                    onPress={() => setStatusLista("cancelado")}
+                    clickButton={statusLista === "Cancelado"}
+                    onPress={() => setStatusLista("Cancelado")}
                 />
 
             </FilterAppointment>
@@ -102,32 +107,32 @@ export const PatientConsultations = ({navigation}) => {
             {/* lista */}
             <ListComponent
 
-                data={Consultas}
+                data={consultas}
                 keyExtractor={(item) => item.id}
 
                 renderItem={
                     ({ item }) =>
-                        statusLista == item.situacao && (
+                        statusLista == item.situacao.situacao && (
                             <AppointmentCard
-                                onPressQuery={() => setShowQueryModal(item.situacao === "pendente" ? true : false)}
-                                situacao={item.situacao}
+                                situacao={item.situacao.situacao}
+                                onPressCard={() => setShowQueryModal(item.situacao.situacao === "Agendado" ? true : false)}
                                 onPressCancel={() => setShowModalCancel(true)}
                                 onPressAppointment={() => setShowModalAppointment(true)}
                                 navigation={navigation}
-                                ProfileNameCard = {item.nome}
-                                Age = "22 anos"
-                                TipoConsulta = "Rotina"
+                                ProfileNameCard={item.medicoClinica.medico.idNavigation.nome}
+                                Age={dateFormatDbToView(item.dataConsulta)}
+                                TipoConsulta={functionPrioridade(item.prioridade.prioridade)}
                             />
                         )
                 }
 
             />
 
-                <BtnIcon  onPress={() => setShowModalAppointment(true)}>
-                    <FontAwesome6 name="stethoscope" size={24} color="white" />
-                </BtnIcon>
+            <BtnIcon onPress={() => setShowModalAppointment(true)}>
+                <FontAwesome6 name="stethoscope" size={24} color="white" />
+            </BtnIcon>
 
-                 {/* Modal ver prontuario */}
+            {/* Modal ver prontuario */}
 
             <BookModal
                 visible={showModalAppointment}
@@ -136,16 +141,16 @@ export const PatientConsultations = ({navigation}) => {
             />
 
             <QueryDoctorModal
-            visible={showQueryModal}
-            setShowQueryModal={setShowQueryModal}
-            setShowModalAppointment={() => setShowQueryModal(false)}
-            navigation={navigation}
+                visible={showQueryModal}
+                setShowQueryModal={setShowQueryModal}
+                setShowModalAppointment={() => setShowQueryModal(false)}
+                navigation={navigation}
             />
 
             <CancellationModal
-            navigation={navigation}
-            visible={showModalCancel}
-            setShowModalCancel={setShowModalCancel}
+                navigation={navigation}
+                visible={showModalCancel}
+                setShowModalCancel={setShowModalCancel}
             />
 
 

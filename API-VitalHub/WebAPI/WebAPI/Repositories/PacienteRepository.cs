@@ -75,7 +75,7 @@ namespace WebAPI.Repositories
 
         public List<Consulta> BuscarRealizadas(Guid Id)
         {
-            return ctx.Consultas.Include(x => x.Situacao).Where(x => x.PacienteId == Id && x.Situacao.Situacao == "Realizada").ToList();
+            return ctx.Consultas.Include(x => x.Situacao).Where(x => x.PacienteId == Id && x.Situacao!.Situacao == "Realizada").ToList();
         }
 
         public void Cadastrar(Usuario user)

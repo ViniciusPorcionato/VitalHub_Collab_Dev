@@ -14,6 +14,7 @@ if (!global.btoa) {
 
 
 export const userDecodeToken = async () => {
+
     const token = await AsyncStorage.getItem("token");
 
     if (token === null) {
@@ -27,6 +28,6 @@ export const userDecodeToken = async () => {
         name: decoded.name,
         email: decoded.email,
         role: decoded.role,
-        token: token
+        id: decoded.jti
     }
 }

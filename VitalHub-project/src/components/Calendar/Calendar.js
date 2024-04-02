@@ -6,7 +6,7 @@ import moment from "moment";
 // import component StyledCalendarStrip
 import { StyledCalendarStrip } from './CalendarStyles';
 
-export const CalendarHome = () => {
+export const CalendarHome = ({setDataConsulta}) => {
 
     //define padrão pt-br para calendário
     moment.updateLocale("pt-br", {
@@ -79,7 +79,7 @@ export const CalendarHome = () => {
             //scroll da barra
             scrollable={true}
 
-            onDateSelected={txt => console.log(txt)}
+            onDateSelected={date => setDataConsulta(moment(date).format('YYYY-MM-DD'))}
         />
     );
 
