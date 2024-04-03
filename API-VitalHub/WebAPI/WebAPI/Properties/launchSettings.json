@@ -15,7 +15,7 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       //"applicationUrl": "http://172.16.39.121:4466", //Vinicius
-      //"applicationUrl": "http://192.168.21.127:4466", //Murilo
+      "applicationUrl": "http://172.16.39.96:4466", //Murilo
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
