@@ -28,6 +28,11 @@ export const PatientConsultations = ({ navigation }) => {
     const [profile, setProfile] = useState({})
     const [dataConsulta, setDataConsulta] = useState('')
 
+    const [consultaSelecionada, setConsultaSelecionada] = useState(null)
+
+
+
+
     async function ProfileLoad() {
 
         const token = await userDecodeToken();
@@ -35,7 +40,22 @@ export const PatientConsultations = ({ navigation }) => {
         if (token != null) {
             setProfile(token)
 
-            setDataConsulta(moment() .format('YYYY-MM-DD'))
+            setDataConsulta(moment().format('YYYY-MM-DD'))
+        }
+    }
+
+
+    function MostrarModal(modal, consulta) {
+
+        setConsultaSelecionada(consulta)
+
+        if (modal == 'cancelar') {
+            setShowModalCancel(true)
+        } else if (modal == 'localConsulta') {
+            setShowModalAppointmentQuery(true)
+        } else {
+            //agendar uma nova consulta
+            setShowModalAppointment(true)
         }
     }
 
@@ -44,7 +64,7 @@ export const PatientConsultations = ({ navigation }) => {
 
         //Chamando o metodo da api
         await api.get(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${profile.id}`
-        ).then(response =>{
+        ).then(response => {
             setConsultas(response.data)
         }).catch(error => {
             console.log(error);
@@ -59,7 +79,7 @@ export const PatientConsultations = ({ navigation }) => {
 
     //Criar um useEffect para a chamda da função
     useEffect(() => {
-        if(dataConsulta != ''){
+        if (dataConsulta != '') {
             GetConsultas()
         }
     }, [dataConsulta])
@@ -75,7 +95,7 @@ export const PatientConsultations = ({ navigation }) => {
                 navigation={navigation}
             />
 
-            <CalendarHome 
+            <CalendarHome
                 setDataConsulta={setDataConsulta}
             />
 
@@ -109,18 +129,19 @@ export const PatientConsultations = ({ navigation }) => {
 
                 data={consultas}
                 keyExtractor={(item) => item.id}
-
                 renderItem={
                     ({ item }) =>
                         statusLista == item.situacao.situacao && (
                             <AppointmentCard
                                 situacao={item.situacao.situacao}
                                 onPressCard={() => setShowQueryModal(item.situacao.situacao === "Agendado" ? true : false)}
-                                onPressCancel={() => setShowModalCancel(true)}
-                                onPressAppointment={() => setShowModalAppointment(true)}
+
+                                onPressCancel={() => MostrarModal('cancelar', item)}
+                                onPressAppointment={() => MostrarModal('localConsulta', item)}
+
                                 navigation={navigation}
                                 ProfileNameCard={item.medicoClinica.medico.idNavigation.nome}
-                                Age={dateFormatDbToView(item.dataConsulta)}
+                                Age={item.medicoClinica.medico.crm}
                                 TipoConsulta={functionPrioridade(item.prioridade.prioridade)}
                             />
                         )
@@ -132,21 +153,24 @@ export const PatientConsultations = ({ navigation }) => {
                 <FontAwesome6 name="stethoscope" size={24} color="white" />
             </BtnIcon>
 
-            {/* Modal ver prontuario */}
-
+            {/* Modal para agendar uma nova consulta */}
             <BookModal
                 visible={showModalAppointment}
                 setShowModalAppointment={setShowModalAppointment}
                 navigation={navigation}
             />
 
+            {/* Modal para ver o local da consulta */}
             <QueryDoctorModal
+                consulta={consultaSelecionada}
+
                 visible={showQueryModal}
                 setShowQueryModal={setShowQueryModal}
-                setShowModalAppointment={() => setShowQueryModal(false)}
+                setShowModalAppointmentQuery={() => setShowQueryModal(false)}
                 navigation={navigation}
             />
 
+            {/* Modal para cancelar a consulta */}
             <CancellationModal
                 navigation={navigation}
                 visible={showModalCancel}

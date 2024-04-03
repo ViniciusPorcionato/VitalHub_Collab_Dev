@@ -7,6 +7,8 @@ import { ContainerMedicalRecord } from "../Container/ContainerStyle"
 
 export const AppointmentModal = ({
     navigation,
+    consulta,
+    roleUsuario,
     visible,
     setShowModalAppointment,
     ...rest

@@ -7,7 +7,7 @@ import { useState } from 'react';
 export const AppointmentCard = ({
     navigation,
     profile = "Paciente",
-    situacao = "pendente",
+    situacao = "Agendado",
     onPressCancel,
     onPressAppointment,
     ProfileNameCard,
@@ -46,10 +46,10 @@ export const AppointmentCard = ({
                     </ClockCard>
 
                     {
-                        situacao == "cancelado" ? (
+                        situacao == "Cancelado" ? (
                             <>
                             </>
-                        ) : situacao == "pendente" ? (
+                        ) : situacao == "Agendado" ? (
 
                             <ButtonCard onPress={onPressCancel}>
                                 <ButtonTextCard situacao={situacao}>Cancelar</ButtonTextCard>

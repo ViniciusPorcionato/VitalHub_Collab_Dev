@@ -6,12 +6,24 @@ import { ContainerMedicalRecord } from "../Container/ContainerStyle"
 import { ContainerQueryMedical, QueryImageModal, QueryModal, QueryModalContent, QueryModalText } from "./Styles"
 
 export const QueryDoctorModal = ({
+    consulta,
+    roleUsuario,
     navigation,
     visible,
     setShowQueryModal,
-    setShowModalAppointment,
+    setShowModalAppointmentQuery,
     ...rest
 }) => {
+
+    function handlePress(rota) {
+
+        setShowModalAppointmentQuery(false)// fechar o modal
+
+        //acesso a rota passando o id entre as navegações
+        navigation.replace(rota,{clinicaId : consulta.medicoClinica.clinicaId})
+        
+    }
+
     return (
         <Modal
             {...rest}
@@ -36,22 +48,17 @@ export const QueryDoctorModal = ({
 
                     </ContainerQueryMedical>
  
-                    <ButtonModal onPress={() => navigation.replace("ConsultationLocation")}>
+                    {/* <ButtonModal onPress={() => navigation.replace("ConsultationLocation")}> */}
+                    <ButtonModal onPress={() => handlePress('ConsultationLocation')}>
                         <ButtonTitle>Ver Local da Consulta</ButtonTitle>
                     </ButtonModal>
 
-                    {/* <ButtonSecondary>
-                        <ButtonTitleSecondary>Cancelar</ButtonTitleSecondary>
-                    </ButtonSecondary> */}
-
-                    <LinkCodeModal onPress={() => setShowModalAppointment(false)}>Cancelar</LinkCodeModal>
+                    <LinkCodeModal onPress={() => setShowModalAppointmentQuery(false)}>Cancelar</LinkCodeModal>
 
                 </QueryModalContent>
 
             </QueryModal>
-
-
-
+            
         </Modal>
     )
 }

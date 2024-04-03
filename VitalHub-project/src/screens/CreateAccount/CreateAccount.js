@@ -19,7 +19,15 @@ export const CreateAccount = ({navigation}) => {
             <Subtitle>Insira seu endereço de e-mail e senha para realizar seu cadastro.</Subtitle>
 
             <Input
-                placeholder={'Usuário ou E-mail'}
+                placeholder={'Nome de Usuário'}
+                keyboardType={'text'}
+                placeholderTextColor={'#34898F'}
+            // value={fieldValue}
+            // onChangeText={onChangeText}
+            />
+
+            <Input
+                placeholder={'E-mail'}
                 keyboardType={'text'}
                 placeholderTextColor={'#34898F'}
             // value={fieldValue}
