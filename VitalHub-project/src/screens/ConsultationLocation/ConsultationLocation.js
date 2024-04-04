@@ -12,6 +12,15 @@ export const ConsultationLocation = ({ navigation, route }) => {
 
     const [clinica, setClinica] = useState(null)
 
+    async function BuscarClinica() {
+        await api.get(`/Clinica/BuscarPorId?id=${route.params.clinicaId}`)
+            .then(response => {
+                setClinica(response.data)
+            }).catch(error => {
+                console.log(error);
+            })
+    }
+
     useEffect(() => {
 
         if (clinica == null) {
@@ -20,14 +29,7 @@ export const ConsultationLocation = ({ navigation, route }) => {
 
     }, [clinica])
 
-    async function BuscarClinica() {
-        await api.get(`/Clinica/BuscarPorId?id=${route.params.clinicaID}`)
-            .then(response => {
-                setClinica(response.data)
-            }).catch(error => {
-                console.log(error);
-            })
-    }
+
 
     return (
 
@@ -37,16 +39,19 @@ export const ConsultationLocation = ({ navigation, route }) => {
                 clinica != null && (
                     <>
                         <LocationImage>
-                            <Map />
+                            <Map 
+                            latitude={clinica.endereco.latitude}
+                            longitude={clinica.endereco.longitude}
+                            />
                         </LocationImage>
 
-                        <TitleProfile>Clínica Natureh</TitleProfile>
+                        <TitleProfile>{clinica.nomeFantasia}</TitleProfile>
 
-                        <SubtitleProfile>São Paulo, SP</SubtitleProfile>
+                        <SubtitleProfile>{clinica.endereco.cidade}</SubtitleProfile>
 
                         <BoxInput
                             textLabel='Endereço'
-                            placeholder='Endereço...'
+                            fieldValue={clinica.endereco.logradouro}
                             keyType='text'
                         />
 
@@ -54,15 +59,15 @@ export const ConsultationLocation = ({ navigation, route }) => {
 
                             <BoxInput
                                 textLabel='Número'
-                                placeholder='Número'
+                                fieldValue={JSON.stringify(clinica.endereco.numero)}
                                 keyType='numeric'
                                 fieldWidth={45}
                                 maxLength={8}
                             />
 
                             <BoxInput
-                                textLabel='Bairro'
-                                placeholder='Bairro...'
+                                textLabel='CEP'
+                                fieldValue={clinica.endereco.cep}
                                 keyType='text'
                                 fieldWidth={50}
                             />

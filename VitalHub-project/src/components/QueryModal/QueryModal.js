@@ -11,16 +11,16 @@ export const QueryDoctorModal = ({
     navigation,
     visible,
     setShowQueryModal,
-    setShowModalAppointmentQuery,
+    // setShowModalAppointmentQuery,
     ...rest
 }) => {
 
     function handlePress(rota) {
-
-        setShowModalAppointmentQuery(false)// fechar o modal
+        console.log( consulta )
+        setShowQueryModal(false)// fechar o modal
 
         //acesso a rota passando o id entre as navegações
-        navigation.replace(rota,{clinicaId : consulta.medicoClinica.clinicaId})
+        navigation.replace(rota, {clinicaId : consulta.medicoClinica.clinicaId})
         
     }
 
@@ -53,7 +53,7 @@ export const QueryDoctorModal = ({
                         <ButtonTitle>Ver Local da Consulta</ButtonTitle>
                     </ButtonModal>
 
-                    <LinkCodeModal onPress={() => setShowModalAppointmentQuery(false)}>Cancelar</LinkCodeModal>
+                    <LinkCodeModal onPress={() => setShowQueryModal(false)}>Cancelar</LinkCodeModal>
 
                 </QueryModalContent>
 

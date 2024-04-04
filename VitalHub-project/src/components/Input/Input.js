@@ -47,7 +47,8 @@ export const InputProfile = ({
     onChangeText,
     keyType,
     placeholderTextColor,
-    maxLength
+    maxLength,
+    editable = false
 }) => {
     return(
         <InputProfileBox
@@ -57,6 +58,7 @@ export const InputProfile = ({
         onChangeText={onChangeText}
         placeholderTextColor={placeholderTextColor}
         maxLength={maxLength}
+        editable={editable}
         />
     )
 }

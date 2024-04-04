@@ -13,13 +13,13 @@ import MapViewDirections from 'react-native-maps-directions';
 import { mapskey } from '../../Utils/mapsKey';
 
 
-export default function Map() {
+export default function Map({latitude, longitude}) {
 
   const mapReference = useRef(null);
   const [initialPosition, setInitialPosition] = useState(null);
   const[finalPosition, setFinalPosition] = useState({
-    latitude: -23.629205,
-    longitude: -46.471853
+    latitude: latitude,
+    longitude: longitude
   })
 
   async function CapturarLocalizacao() {

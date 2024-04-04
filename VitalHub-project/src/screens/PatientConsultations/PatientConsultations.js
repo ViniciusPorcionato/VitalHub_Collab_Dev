@@ -9,7 +9,7 @@ import { AppointmentCard } from "../../components/AppointmentCard/AppointmentCar
 import { FontAwesome6 } from '@expo/vector-icons';
 import { BtnIcon } from "./Style"
 import { BookModal } from "../../components/BookModal/BookModal"
-import { QueryDoctorModal, QueryModal } from "../../components/QueryModal/QueryModal"
+import { QueryDoctorModal } from "../../components/QueryModal/QueryModal"
 import { CancellationModal } from "../../components/CancellationModal/CancellationModal"
 import { userDecodeToken } from "../../Utils/Auth"
 import { dateFormatDbToView, functionPrioridade } from "../../Utils/StringFunction"
@@ -51,8 +51,9 @@ export const PatientConsultations = ({ navigation }) => {
 
         if (modal == 'cancelar') {
             setShowModalCancel(true)
+
         } else if (modal == 'localConsulta') {
-            setShowModalAppointmentQuery(true)
+            setShowQueryModal( consulta.situacao.situacao === "Agendado" ? true : false )
         } else {
             //agendar uma nova consulta
             setShowModalAppointment(true)
@@ -72,12 +73,12 @@ export const PatientConsultations = ({ navigation }) => {
 
     }
 
-    //Criar um useEffect para a chamda da função
+    //Criar um useEffect para a chamando da função
     useEffect(() => {
         ProfileLoad();
     }, [])
 
-    //Criar um useEffect para a chamda da função
+    //Criar um useEffect para a chamando da função
     useEffect(() => {
         if (dataConsulta != '') {
             GetConsultas()
@@ -134,10 +135,10 @@ export const PatientConsultations = ({ navigation }) => {
                         statusLista == item.situacao.situacao && (
                             <AppointmentCard
                                 situacao={item.situacao.situacao}
-                                onPressCard={() => setShowQueryModal(item.situacao.situacao === "Agendado" ? true : false)}
+                                onPressQuery={() => MostrarModal('localConsulta', item)}
 
                                 onPressCancel={() => MostrarModal('cancelar', item)}
-                                onPressAppointment={() => MostrarModal('localConsulta', item)}
+                                onPressAppointment={() => MostrarModal('prontuario', item)}
 
                                 navigation={navigation}
                                 ProfileNameCard={item.medicoClinica.medico.idNavigation.nome}
@@ -166,7 +167,6 @@ export const PatientConsultations = ({ navigation }) => {
 
                 visible={showQueryModal}
                 setShowQueryModal={setShowQueryModal}
-                setShowModalAppointmentQuery={() => setShowQueryModal(false)}
                 navigation={navigation}
             />
 
@@ -176,8 +176,6 @@ export const PatientConsultations = ({ navigation }) => {
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
             />
-
-
 
 
         </Container>
