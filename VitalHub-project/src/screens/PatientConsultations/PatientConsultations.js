@@ -31,13 +31,12 @@ export const PatientConsultations = ({ navigation }) => {
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
 
 
-
-
     async function ProfileLoad() {
 
         const token = await userDecodeToken();
 
         if (token != null) {
+
             setProfile(token)
 
             setDataConsulta(moment().format('YYYY-MM-DD'))
@@ -52,11 +51,8 @@ export const PatientConsultations = ({ navigation }) => {
         if (modal == 'cancelar') {
             setShowModalCancel(true)
 
-        } else if (modal == 'localConsulta') {
+        } else{
             setShowQueryModal( consulta.situacao.situacao === "Agendado" ? true : false )
-        } else {
-            //agendar uma nova consulta
-            setShowModalAppointment(true)
         }
     }
 

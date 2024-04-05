@@ -10,8 +10,8 @@ import { CancellationModal } from "../../components/CancellationModal/Cancellati
 import { AppointmentModal } from "../../components/AppointmentModal/AppointmentModal"
 import api from "../../Service/Service"
 import { dateFormatDbToView, functionPrioridade } from "../../Utils/StringFunction"
-import { userDecodeToken } from "../../Utils/Auth"
 import moment from "moment"
+import { userDecodeToken } from "../../Utils/Auth"
 
 export const MedicalConsultations = ({ navigation }) => {
 
@@ -21,8 +21,14 @@ export const MedicalConsultations = ({ navigation }) => {
     //state para receber o array de consultas
     const [consultas, setConsultas] = useState([]);
     const [profile, setProfile] = useState({});
-    const [dataConsultaMed, setDataConsultaMed] = useState('');
 
+    const [dataConsulta, setDataConsulta] = useState('');
+
+    const [consultaSelecionada, setConsultaSelecionada] = useState(null)
+    
+    // state para exibição dos modais 
+    const [showModalCancel, setShowModalCancel] = useState(false)
+    const [showModalAppointment, setShowModalAppointment] = useState(false)
 
     async function ProfileLoad() {
 
@@ -32,7 +38,20 @@ export const MedicalConsultations = ({ navigation }) => {
 
             setProfile(token)
 
-            setDataConsultaMed(moment().format('YYYY-MM-DD'))
+            setDataConsulta(moment().format('YYYY-MM-DD'))
+        }
+    }
+
+
+    function MostrarModal(modal, consulta) {
+
+        setConsultaSelecionada(consulta)
+
+        if (modal == 'cancelar') {
+            setShowModalCancel(true)
+
+        } else{
+            setShowModalAppointment( consulta.situacao.situacao === "Realizado" ? true : false )
         }
     }
 
@@ -40,7 +59,7 @@ export const MedicalConsultations = ({ navigation }) => {
     async function GetConsultasMed() {
 
         //Chamando o metodo da api para listar as consultas relacionadas ao medico logado
-        await api.get(`/Medicos/BuscarPorData?data=${dataConsultaMed}&id=${profile.id}`
+        await api.get(`/Medicos/BuscarPorData?data=${dataConsulta}&id=${profile.id}`
         ).then(response => {
             //setar as informações da api em um state consultas
             setConsultas(response.data)
@@ -57,15 +76,13 @@ export const MedicalConsultations = ({ navigation }) => {
 
     //Criar um useEffect para a chamda da função
     useEffect(() => {
-        if (dataConsultaMed != '') {
+        if (dataConsulta != '') {
+
             GetConsultasMed()
         }
-    }, [dataConsultaMed])
+    }, [dataConsulta])
 
 
-    // state para exibição dos modais 
-    const [showModalCancel, setShowModalCancel] = useState(false)
-    const [showModalAppointment, setShowModalAppointment] = useState(false)
 
 
     return (
@@ -75,7 +92,9 @@ export const MedicalConsultations = ({ navigation }) => {
                 navigation={navigation}
             />
 
-            <CalendarHome />
+            <CalendarHome
+            setDataConsulta={setDataConsulta}
+            />
 
             <FilterAppointment>
 
@@ -108,7 +127,6 @@ export const MedicalConsultations = ({ navigation }) => {
 
                 data={consultas}
                 keyExtractor={(item) => item.id}
-
                 renderItem={
                     ({ item }) =>
                         statusLista == item.situacao.situacao && (
@@ -116,12 +134,15 @@ export const MedicalConsultations = ({ navigation }) => {
                                 situacao={item.situacao.situacao}
                                 profile={"Medico"}
 
-                                onPressCancel={() => setShowModalCancel(true)}
-                                onPressAppointment={() => setShowModalAppointment(true)}
+                                onPressCancel={() => MostrarModal('cancelar, item')}
+                                onPressAppointment={() => MostrarModal('inserirProntuario', item)}
+
+                                // onPressCancel={() => setShowModalCancel(true)}
+                                // onPressAppointment={() => setShowModalAppointment(true)}
 
                                 navigation={navigation}
                                 ProfileNameCard={item.paciente.idNavigation.nome}
-                                Age={item.paciente.dataNascimento}
+                                Age={dateFormatDbToView(item.paciente.dataNascimento)}
                                 TipoConsulta={functionPrioridade(item.prioridade.prioridade)}
                             />
                         )
@@ -139,7 +160,6 @@ export const MedicalConsultations = ({ navigation }) => {
             {/* Modal ver prontuario */}
             <AppointmentModal
                 consulta={consultaSelecionada}
-                roleUsuario={profile.role}
                 visible={showModalAppointment}
                 setShowModalAppointment={setShowModalAppointment}
                 navigation={navigation}

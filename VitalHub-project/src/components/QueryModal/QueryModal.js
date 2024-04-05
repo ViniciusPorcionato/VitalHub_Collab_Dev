@@ -16,7 +16,6 @@ export const QueryDoctorModal = ({
 }) => {
 
     function handlePress(rota) {
-        console.log( consulta )
         setShowQueryModal(false)// fechar o modal
 
         //acesso a rota passando o id entre as navegações

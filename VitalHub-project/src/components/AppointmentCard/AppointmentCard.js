@@ -15,13 +15,9 @@ export const AppointmentCard = ({
     TipoConsulta,
     onPressQuery
 }) => {
-
-
-    // const [profile, setProfile] = useState("Paciente")
-
     return (
 
-        <ContainerCardList onPress={onPressQuery}>
+        <ContainerCardList onPress={onPressAppointment} >
 
             <ProfileImage source={{ uri: "https://github.com/Guidcampos.png" }} />
 
@@ -63,7 +59,6 @@ export const AppointmentCard = ({
                     }
 
 
-
                 </ViewRow>
 
 
@@ -85,8 +80,7 @@ export const SelectMedCard = ({
         <ContainerCardList>
 
             <ProfileImage source={imageUrl} />
-            {/* <ProfileImage source={{ uri: "https://github.com/Guidcampos.png" }} /> */}
-
+            
             <ContentMedCard>
                 <DataProfileCard>
                     <ProfileName>{ProfileNameCard}</ProfileName>
