@@ -5,15 +5,35 @@ import { LinkBack } from "../../components/Links/Links"
 import { ViewPrescriptiionImage } from "../../components/Logo/LogoStyle"
 import { SubtitleViewPrescription, TitleViewPrescriptiion } from "../../components/Title/TitleStyle"
 import { BoxViewImageImport, ImagePrescription, ImportImages, Line } from "./Styles"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import api from "../../Service/Service"
 
 export const ViewPrescription = ({ navigation, route }) => {
 
+
+    const [consulta, setConsulta] = useState("");
+    // const [description, setDescription] = useState("");
+    // const [diagnosis, setDiagnosis] = useState("");
+    // const [prescription, setPrescription] = useState("");
+    // const [result, setResult] = useState("");
+
     useEffect(() => {
 
-        console.log(route.params);
+        async function getConsulta() {
 
-    }, [route.params])
+
+            try {
+                const promise = await api.get("/Consultas")
+
+                setConsultas(promise.data)
+                
+            } catch (error) {
+                console.log("Deu ruim na API", error);
+
+            }
+        }
+        getConsulta();
+    }, [])
 
     return (
         <ScrollViewPrescriptiion>
@@ -37,6 +57,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                     fieldWidth={100}
                     fieldHeight={121}
                     textLabel={'Descrição da consulta'}
+                    fieldValue={consulta.descricao}
                     keyType="text"
                 />
 
@@ -44,6 +65,8 @@ export const ViewPrescription = ({ navigation, route }) => {
                     fieldWidth={100}
                     fieldHeight={53}
                     textLabel={'Diagnóstico do paciente'}
+                    
+                    fieldValue={consulta.diagnostico}
                     keyType="text"
                 />
 
@@ -51,7 +74,8 @@ export const ViewPrescription = ({ navigation, route }) => {
                     fieldWidth={100}
                     fieldHeight={121}
                     textLabel={'Prescrição médica'}
-                    keyType="text"
+                    fieldValue={consulta.receita.medicamento}
+                    keyType="text"  
                 />
 
                 <BoxViewImageImport>

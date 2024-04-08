@@ -7,6 +7,8 @@ import { ButtonTitle, SubtitleProfile, TitleProfile } from "../../components/Tit
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useEffect, useState } from "react"
 import { userDecodeToken } from "../../Utils/Auth"
+import api from "../../Service/Service"
+import { dateFormatDbToView } from "../../Utils/StringFunction"
 
 
 export const UserProfile = ({ navigation }) => {
@@ -14,11 +16,17 @@ export const UserProfile = ({ navigation }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('');
+    const[id, setId] = useState('');
+    const [profile, setProfile] = useState();
 
 
 
     useEffect(() => {
         profileLoad()
+    }, [])
+
+    useEffect(() => {
+        BuscarPerfil()
     }, [])
 
     const logout = async (navigation) => {
@@ -56,6 +64,16 @@ export const UserProfile = ({ navigation }) => {
         setName(token.name)
         setEmail(token.email)
         setRole(token.role)
+        setId(token.id)
+    }
+
+    async function BuscarPerfil(){
+        await api.get(`/Pacientes/BuscarPorId?id=${id}`)
+        .then(response => {
+            setProfile(response.data)
+        }).catch(error => {
+            console.log(error);
+        })
     }
 
     return (
@@ -75,6 +93,7 @@ export const UserProfile = ({ navigation }) => {
                     placeholder='dd/mm/aaaa'
                     keyType='numeric'
                     maxLength={8}
+                    // fieldValue={profile.dataNascimento}
                 />
 
                 <BoxInput

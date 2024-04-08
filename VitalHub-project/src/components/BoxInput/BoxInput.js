@@ -27,7 +27,7 @@ export const BoxInput = ({
 export const BoxInputViewPrescription = ({
     fieldWidth = 90,
     fieldHeight = 90,
-    editable = true,
+    editable = false,
     textLabel,
     placeholder,
     fieldValue = null,
