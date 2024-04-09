@@ -16,8 +16,9 @@ export const UserProfile = ({ navigation }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('');
-    // const[id, setId] = useState('');
     const [profile, setProfile] = useState();
+
+    const [profileMed, setProfileMed] = useState()
 
     const logout = async (navigation) => {
 
@@ -58,16 +59,17 @@ export const UserProfile = ({ navigation }) => {
     }
 
     async function GetPerfil(token) {
-        await api.get(`/Pacientes/BuscarPorId?id=${token.id}`)
+        await api.get(`/${token.role}s/BuscarPorId?id=${token.id}`)
             .then(response => {
                 const responseData = response.data
                 setProfile(responseData)
-                console.log(profile);
 
             }).catch(error => {
                 console.log(error);
             })
     }
+
+
 
     useEffect(() => {
         profileLoad()
@@ -82,6 +84,7 @@ export const UserProfile = ({ navigation }) => {
         <ScrollProfile>
             {
                 profile ? (
+
                     <Container>
 
                         <UserImage
@@ -93,19 +96,39 @@ export const UserProfile = ({ navigation }) => {
 
                         <SubtitleProfile>{email}</SubtitleProfile>
 
-                        <BoxInput
-                            textLabel='Data de Nascimento'
-                            placeholder='dd/mm/aaaa'
-                            keyType='numeric'
-                            fieldValue={profile.dataNascimento}
-                        />
+                        {
+                            role == 'Paciente' ?(
+                                <BoxInput
+                                    textLabel='Data de Nascimento'
+                                    placeholder='dd/mm/aaaa'
+                                    keyType='numeric'
+                                    fieldValue={dateFormatDbToView(profile.dataNascimento)}
+                                />
+                            ) : null
+                        }
 
-                        <BoxInput
-                            textLabel='CPF'
-                            placeholder='*********-**'
-                            keyType='numeric'
-                            fieldValue={profile.cpf}
-                        />
+                        {
+                            role == "Paciente" ? (
+                                
+                                <BoxInput
+                                    textLabel='CPF'
+                                    placeholder='*********-**'
+                                    keyType='numeric'
+                                    fieldValue={profile.cpf}
+                                />
+
+                            ) : (
+
+                                <BoxInput
+                                    textLabel='CRM'
+                                    placeholder='*********-**'
+                                    keyType='numeric'
+                                    fieldValue={profile.crm}
+                                />
+
+                            )
+                        }
+
 
                         <BoxInput
                             textLabel='Endereço'
@@ -130,7 +153,7 @@ export const UserProfile = ({ navigation }) => {
                                 placeholder='Cidade...'
                                 keyType='text'
                                 fieldWidth={50}
-                            fieldValue={profile.endereco.cidade}
+                                fieldValue={profile.endereco.cidade}
                             />
 
                         </ContainerInput>
@@ -151,7 +174,7 @@ export const UserProfile = ({ navigation }) => {
                         <StatusBar barStyle='dark-content' translucent backgroundColor='transparent' />
 
                     </Container>
-                ): (
+                ) : (
                     <>
                     </>
                 )
