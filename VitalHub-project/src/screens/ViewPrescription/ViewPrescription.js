@@ -14,7 +14,7 @@ export const ViewPrescription = ({ navigation, route }) => {
     const [consulta, setConsulta] = useState("");
    
     async function getConsulta() {
-        await api.get(`/Clinica/BuscarPorId?id=${route.params.consultaId}`)
+        await api.get("/Consulta")
             .then(response => {
                 setConsulta(response.data)
             }).catch(error => {
