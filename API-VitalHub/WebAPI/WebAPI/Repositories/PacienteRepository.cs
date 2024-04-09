@@ -60,8 +60,12 @@ namespace WebAPI.Repositories
                 .Include(x => x.Situacao)
                 .Include(x => x.Prioridade)
                 .Include(x => x.MedicoClinica!.Medico!.IdNavigation)
+<<<<<<< HEAD
                 //diferenca em dias entre a Data da Consulta e a dataConsulta é igual a 0
                 .Where(x => x.PacienteId == idPaciente && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0)
+=======
+                .Where(x  => x.PacienteId == idPaciente && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0)
+>>>>>>> 95a254050a75c9f75c83956c2cc90a3a3f62cd2a
                 .ToList();
         }
 
@@ -70,7 +74,11 @@ namespace WebAPI.Repositories
             return ctx.Pacientes
                 .Include(x => x.IdNavigation)
                 .Include(x => x.Endereco)
+<<<<<<< HEAD
                 .FirstOrDefault(x => x.Id == Id)!;
+=======
+                .FirstOrDefault(x => x.Id == Id);
+>>>>>>> 95a254050a75c9f75c83956c2cc90a3a3f62cd2a
         }
 
         public List<Consulta> BuscarRealizadas(Guid Id)

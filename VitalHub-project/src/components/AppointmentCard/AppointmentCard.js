@@ -96,6 +96,7 @@ export const SelectMedCard = ({
 
 export const SelectClinicCard = ({
     textCard,
+   
     onPressCard,
     ProfileNameCard,
     rate,
