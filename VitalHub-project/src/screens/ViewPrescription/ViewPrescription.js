@@ -12,28 +12,22 @@ export const ViewPrescription = ({ navigation, route }) => {
 
 
     const [consulta, setConsulta] = useState("");
-    // const [description, setDescription] = useState("");
-    // const [diagnosis, setDiagnosis] = useState("");
-    // const [prescription, setPrescription] = useState("");
-    // const [result, setResult] = useState("");
+   
+    async function getConsulta() {
+        await api.get(`/Clinica/BuscarPorId?id=${route.params.consultaId}`)
+            .then(response => {
+                setConsulta(response.data)
+            }).catch(error => {
+                console.log(error);
+            })
+    }
 
     useEffect(() => {
-
-        async function getConsulta() {
-
-
-            try {
-                const promise = await api.get("/Consultas")
-
-                setConsultas(promise.data)
-                
-            } catch (error) {
-                console.log("Deu ruim na API", error);
-
-            }
+        if (consulta == null) {
+            getConsulta();
         }
-        getConsulta();
-    }, [])
+        
+    }, [consulta])
 
     return (
         <ScrollViewPrescriptiion>
@@ -57,6 +51,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                     fieldWidth={100}
                     fieldHeight={121}
                     textLabel={'Descrição da consulta'}
+                    placeholder={consulta.descricao}
                     fieldValue={consulta.descricao}
                     keyType="text"
                 />
@@ -65,7 +60,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                     fieldWidth={100}
                     fieldHeight={53}
                     textLabel={'Diagnóstico do paciente'}
-                    
+                    placeholder={consulta.diagnostico}
                     fieldValue={consulta.diagnostico}
                     keyType="text"
                 />
@@ -74,6 +69,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                     fieldWidth={100}
                     fieldHeight={121}
                     textLabel={'Prescrição médica'}
+                    placeholder={consulta.receita.medicamento}
                     fieldValue={consulta.receita.medicamento}
                     keyType="text"  
                 />

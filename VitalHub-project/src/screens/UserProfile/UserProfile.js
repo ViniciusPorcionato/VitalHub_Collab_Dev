@@ -16,18 +16,8 @@ export const UserProfile = ({ navigation }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('');
-    const[id, setId] = useState('');
+    // const[id, setId] = useState('');
     const [profile, setProfile] = useState();
-
-
-
-    useEffect(() => {
-        profileLoad()
-    }, [])
-
-    useEffect(() => {
-        BuscarPerfil()
-    }, [])
 
     const logout = async (navigation) => {
 
@@ -57,93 +47,116 @@ export const UserProfile = ({ navigation }) => {
 
         const token = await userDecodeToken();
 
-        if (token) {
-            console.log(token);
+        if (token !== null) {
+            await GetPerfil(token)
         }
 
         setName(token.name)
         setEmail(token.email)
         setRole(token.role)
-        setId(token.id)
+        // setId(token.id)
     }
 
-    async function BuscarPerfil(){
-        await api.get(`/Pacientes/BuscarPorId?id=${id}`)
-        .then(response => {
-            setProfile(response.data)
-        }).catch(error => {
-            console.log(error);
-        })
+    async function GetPerfil(token) {
+        await api.get(`/Pacientes/BuscarPorId?id=${token.id}`)
+            .then(response => {
+                const responseData = response.data
+                setProfile(responseData)
+                console.log(profile);
+
+            }).catch(error => {
+                console.log(error);
+            })
     }
+
+    useEffect(() => {
+        profileLoad()
+    }, [])
+
+    useEffect(() => {
+        GetPerfil()
+    }, [])
+
 
     return (
         <ScrollProfile>
-            <Container>
+            {
+                profile ? (
+                    <Container>
 
-                <UserImage
-                    source={require('../../assets/ProfileImage.png')}
-                />
-
-                <TitleProfile>{name}</TitleProfile>
-
-                <SubtitleProfile>{email}</SubtitleProfile>
-
-                <BoxInput
-                    textLabel='Data de Nascimento'
-                    placeholder='dd/mm/aaaa'
-                    keyType='numeric'
-                    maxLength={8}
-                    // fieldValue={profile.dataNascimento}
-                />
-
-                <BoxInput
-                    textLabel='CPF'
-                    placeholder='*********-**'
-                    keyType='numeric'
-                    maxLength={11}
-                />
-
-                <BoxInput
-                    textLabel='Endereço'
-                    placeholder='Endereço...'
-                    keyType='text'
-                />
-
-                <ContainerInput>
-
-                    <BoxInput
-                        textLabel='Cep'
-                        placeholder='00000-000'
-                        keyType='numeric'
-                        fieldWidth={45}
-                        maxLength={8}
-                    />
-
-                    <BoxInput
-                        textLabel='Cidade'
-                        placeholder='Cidade...'
-                        keyType='text'
-                        fieldWidth={50}
-                    />
-
-                </ContainerInput>
+                        <UserImage
+                            source={require('../../assets/ProfileImage.png')}
+                        />
 
 
-                <Button onPress={() => navigation.replace(( role  == "Paciente") ? "Main" : "MainMed")}>
-                    <ButtonTitle>Salvar</ButtonTitle>
-                </Button>
+                        <TitleProfile>{name}</TitleProfile>
 
-                <ButtonProfile>
-                    <ButtonTitle>Editar</ButtonTitle>
-                </ButtonProfile>
+                        <SubtitleProfile>{email}</SubtitleProfile>
 
-                <ButtonExit onPress={() => logout(navigation)}>
-                    <ButtonTitle>Sair do App</ButtonTitle>
-                </ButtonExit>
+                        <BoxInput
+                            textLabel='Data de Nascimento'
+                            placeholder='dd/mm/aaaa'
+                            keyType='numeric'
+                            fieldValue={profile.dataNascimento}
+                        />
 
-                <StatusBar barStyle='dark-content' translucent backgroundColor='transparent' />
+                        <BoxInput
+                            textLabel='CPF'
+                            placeholder='*********-**'
+                            keyType='numeric'
+                            fieldValue={profile.cpf}
+                        />
 
-            </Container>
+                        <BoxInput
+                            textLabel='Endereço'
+                            placeholder='Endereço...'
+                            keyType='text'
+                            fieldValue={`${profile.endereco.logradouro}, Nº${profile.endereco.numero}`}
+                        />
+
+                        <ContainerInput>
+
+                            <BoxInput
+                                textLabel='Cep'
+                                placeholder='00000-000'
+                                keyType='numeric'
+                                fieldWidth={45}
+                                maxLength={8}
+                                fieldValue={profile.endereco.cep}
+                            />
+
+                            <BoxInput
+                                textLabel='Cidade'
+                                placeholder='Cidade...'
+                                keyType='text'
+                                fieldWidth={50}
+                            fieldValue={profile.endereco.cidade}
+                            />
+
+                        </ContainerInput>
+
+
+                        <Button onPress={() => navigation.replace((role == "Paciente") ? "Main" : "MainMed")}>
+                            <ButtonTitle>Salvar</ButtonTitle>
+                        </Button>
+
+                        <ButtonProfile>
+                            <ButtonTitle>Editar</ButtonTitle>
+                        </ButtonProfile>
+
+                        <ButtonExit onPress={() => logout(navigation)}>
+                            <ButtonTitle>Sair do App</ButtonTitle>
+                        </ButtonExit>
+
+                        <StatusBar barStyle='dark-content' translucent backgroundColor='transparent' />
+
+                    </Container>
+                ): (
+                    <>
+                    </>
+                )
+            }
+
         </ScrollProfile>
     )
 }
