@@ -74,6 +74,7 @@ export const UserProfile = ({ navigation, profile = "Paciente" }) => {
                     placeholder='dd/mm/aaaa'
                     keyType='numeric'
                     maxLength={8}
+                    editable = {false}
                 />
 
                 <BoxInput
