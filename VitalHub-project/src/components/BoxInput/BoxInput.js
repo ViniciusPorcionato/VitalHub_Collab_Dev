@@ -5,7 +5,7 @@ import { FieldContent, FieldContentMedicalRecord } from "./BoxInputStyles"
 
 export const BoxInput = ({
     fieldWidth = 100,
-    editable =  false,
+    editable,
     textLabel,
     placeholder,
     fieldValue = null,
@@ -33,14 +33,15 @@ export const BoxInputViewPrescription = ({
     fieldValue = null,
     onChangeText = null,
     keyType = 'default',
-    maxLength
+    maxLength,
+    multiline = false
 }) => {
     return(
         <FieldContent fieldWidth={fieldWidth} fieldHeight={fieldHeight}>
 
         <Label textLabel={textLabel}/>
 
-        <InputViewPrescription editable={editable} placeholder={placeholder} fieldValue={fieldValue} onChangeText={onChangeText} keyType={keyType} maxLength={maxLength}/>
+        <InputViewPrescription multiline={multiline} editable={editable} placeholder={placeholder} fieldValue={fieldValue} onChangeText={onChangeText} keyType={keyType} maxLength={maxLength}/>
 
         </FieldContent>
     )

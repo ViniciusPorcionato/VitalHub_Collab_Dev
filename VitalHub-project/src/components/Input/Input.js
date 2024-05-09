@@ -48,7 +48,7 @@ export const InputProfile = ({
     keyType,
     placeholderTextColor,
     maxLength,
-    editable = false
+    editable
 }) => {
     return(
         <InputProfileBox

@@ -2,6 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { ButtonCard, ButtonTextCard, ClockCard, ContainerCardList, ContainerCardListClinic, ContainerDate, ContainerRate, ContainerRateTime, ContentCard, ContentMedCard, DataClinicCard, DataProfileCard, HourText, ProfileData, ProfileImage, ProfileName, RateText, TextAge, TextBold, TextBoldClinic, ViewRow } from './AppointmentCardStyles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
+import moment from 'moment';
 
 
 export const AppointmentCard = ({
@@ -12,14 +13,18 @@ export const AppointmentCard = ({
     onPressAppointment,
     ProfileNameCard,
     Age,
+    consultas,
     TipoConsulta,
-    onPressQuery
+    dataConsulta,
+    onPressQuery, 
+    source
 }) => {
     return (
 
-        <ContainerCardList onPress={onPressAppointment} >
+        <ContainerCardList >
 
-            <ProfileImage source={{ uri: "https://github.com/Guidcampos.png" }} />
+            {/* <ProfileImage source={{ uri: "https://github.com/Guidcampos.png" }} /> */}
+            <ProfileImage source={source} />
 
             <ContentCard>
 
@@ -37,8 +42,8 @@ export const AppointmentCard = ({
                 <ViewRow>
 
                     <ClockCard situacao={situacao}>
-                        <AntDesign name="clockcircle" size={14} color={situacao == "pendente" ? "#49B3BA" : "#8C8A97"} />
-                        <TextBold situacao={situacao} color={"#49b3baq"}>14:00</TextBold>
+                        <AntDesign name="clockcircle" size={14} color={situacao == "Agendado" ? "#49B3BA" : "#8C8A97"} />
+                        <TextBold situacao={situacao} color={"#49b3ba"}>{moment(dataConsulta).format('HH:mm')}</TextBold>
                     </ClockCard>
 
                     {
@@ -52,15 +57,14 @@ export const AppointmentCard = ({
                             </ButtonCard>
                         ) : (
 
-                            <ButtonCard onPress={profile !== "Paciente" ? onPressAppointment : () => navigation.replace("ViewPrescription")}>
+                            // <ButtonCard onPress={profile !== "Paciente" ? onPressAppointment : () => navigation.replace("ViewPrescription")}>
+                            <ButtonCard onPress={onPressAppointment}>
                                 <ButtonTextCard situacao={situacao}>Ver prontuário</ButtonTextCard>
                             </ButtonCard>
                         )
                     }
 
-
                 </ViewRow>
-
 
             </ContentCard>
 
@@ -74,13 +78,23 @@ export const SelectMedCard = ({
     onPressCard,
     ProfileNameCard,
     imageUrl,
+    medico,
+    selected,
+    setMedico
 }) => {
     return (
 
-        <ContainerCardList>
+        <ContainerCardList
+            selected={selected}
+            onPress={() => setMedico({
+                medicoClinicaId: medico.id,
+                medicoNome: medico.idNavigation.nome,
+                medicoEspecialidade: medico.especialidade.especialidade1
+            })}
+        >
 
             <ProfileImage source={imageUrl} />
-            
+
             <ContentMedCard>
                 <DataProfileCard>
                     <ProfileName>{ProfileNameCard}</ProfileName>
@@ -99,11 +113,19 @@ export const SelectClinicCard = ({
     onPressCard,
     ProfileNameCard,
     rate,
-    openTime
+    openTime,
+    clinica,
+    setClinica,
+    selected
 }) => {
     return (
 
-        <ContainerCardListClinic>
+        <ContainerCardListClinic
+            selected={selected}
+            onPress={() => setClinica({
+                clinicaId: clinica.id,
+                clinicaLabel: clinica.nomeFantasia
+            })}>
 
 
             <ContentMedCard>
@@ -132,7 +154,7 @@ export const SelectClinicCard = ({
 
                     <MaterialCommunityIcons name="calendar-outline" size={15} color="#49B3BA" />
 
-                        <HourText>{openTime}</HourText>
+                    <HourText>{openTime}</HourText>
 
                 </ContainerDate>
 

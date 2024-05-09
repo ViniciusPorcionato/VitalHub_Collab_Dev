@@ -29,8 +29,6 @@ export default function Map({latitude, longitude}) {
       const currentPosition = await getCurrentPositionAsync()
 
       setInitialPosition(currentPosition)
-
-      console.log(initialPosition);
     }
   }
 

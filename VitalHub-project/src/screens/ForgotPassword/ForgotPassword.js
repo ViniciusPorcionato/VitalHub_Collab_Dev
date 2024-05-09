@@ -4,11 +4,25 @@ import { Feather } from '@expo/vector-icons';
 import { ButtonTitle, Subtitle, Title } from "../../components/Title/TitleStyle";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/ButtonStyle";
+import { useState } from "react";
+import api from "../../Service/Service";
 
-export const ForgotPassword = ({navigation}) => {
+export const ForgotPassword = ({ navigation }) => {
+
+    const [email, setEmail] = useState('vinicius.porcionato2@aluno.senai.br')
+
+    async function EnviarEmail() {
+        await api.post(`/RecuperarSenha?email=${email}`)
+            .then(() => {
+                navigation.replace("CheckEmail", { emailRecuperacao: email })
+            }).catch(error => {
+                console.log(error);
+            })
+    }
+
     return (
         <Container>
-            
+
             {/* lembrar de mexer no icon, pois esta mais acima que a imagem */}
             <ConteinerIcon onPress={() => navigation.replace("Login")}>
 
@@ -30,11 +44,11 @@ export const ForgotPassword = ({navigation}) => {
                 placeholder={'Usuário ou E-mail'}
                 keyboardType={'text'}
                 placeholderTextColor={'#34898F'}
-            // value={fieldValue}
-            // onChangeText={onChangeText}
+                value={email}
+                onChangeText={(txt) => (setEmail(txt))}
             />
 
-            <Button onPress={() => navigation.replace("CheckEmail")}>
+            <Button onPress={() => EnviarEmail()}>
                 <ButtonTitle>Continuar</ButtonTitle>
             </Button>
 

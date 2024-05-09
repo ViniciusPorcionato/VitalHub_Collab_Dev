@@ -14,14 +14,16 @@ import {
 } from "../../components/Title/TitleStyle";
 import api from "../../Service/Service";
 
-export const SelectClinic = ({ navigation }) => {
+export const SelectClinic = ({ navigation, route }) => {
+
   const [clinicas, setClinicas] = useState([]);
+  const [clinica, setClinica] = useState(null);
 
   useEffect(() => {
     async function getClinica() {
       try {
-        const promise = await api.get("/Clinica/ListarTodas");
-
+        const promise = await api.get(`/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`)
+        
         setClinicas(promise.data);
       } catch (error) {
         console.log("Deu ruim na API", error);
@@ -30,13 +32,14 @@ export const SelectClinic = ({ navigation }) => {
     getClinica();
   }, []);
 
-  // const Clinicas = [
-  //     { id: 1, nome: "Clínica Natureh", local: "São Paulo, SP", rate: "4,5", data: "Seg-Sex" },
-  //     { id: 2, nome: "Diamond Pró-Mulher", local: "São Paulo, SP", rate: "4,8", data: "Seg-Sex" },
-  //     { id: 3, nome: "Clinica Villa Lobos", local: "Taboão, SP", rate: "4,2", data: "Seg-Sab" },
-  //     { id: 4, nome: "SP Oncologia Clínica", local: "Taboão, SP", rate: "4,2", data: "Seg-Sab" }
+   function handleContinue(){
+    navigation.replace("SelectMed", {agendamento: {
+      ...route.params.agendamento,
+      ...clinica
+    }})
+  }
 
-  // ];
+
 
   return (
     <Container>
@@ -47,19 +50,18 @@ export const SelectClinic = ({ navigation }) => {
         data={clinicas}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
+
         renderItem={({ item }) => (
           <SelectClinicCard
             ProfileNameCard={item.nomeFantasia}
             textCard={item.endereco.logradouro}
-            
-
-            // rate={item.rate}
-            // openTime={item.data}
+            clinica={item}            
+            setClinica={setClinica}
           />
         )}
       />
 
-      <Button onPress={() => navigation.replace("SelectMed")}>
+      <Button onPress={() => handleContinue()}>
         <ButtonTitle>Continuar</ButtonTitle>
       </Button>
 

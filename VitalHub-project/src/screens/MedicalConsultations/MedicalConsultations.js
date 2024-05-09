@@ -30,6 +30,8 @@ export const MedicalConsultations = ({ navigation }) => {
     const [showModalCancel, setShowModalCancel] = useState(false)
     const [showModalAppointment, setShowModalAppointment] = useState(false)
 
+    const [situacao, setSituacao] = useState('')
+
     async function ProfileLoad() {
 
         const token = await userDecodeToken();
@@ -49,9 +51,10 @@ export const MedicalConsultations = ({ navigation }) => {
 
         if (modal == 'cancelar') {
             setShowModalCancel(true)
+            setSituacao(consulta.situacao.situacao)
 
         } else{
-            setShowModalAppointment( consulta.situacao.situacao === "Realizado" ? true : false )
+            setShowModalAppointment( consulta.situacao.situacao === "Agendado" ? true : false )
         }
     }
 
@@ -80,7 +83,7 @@ export const MedicalConsultations = ({ navigation }) => {
 
             GetConsultasMed()
         }
-    }, [dataConsulta])
+    }, [dataConsulta, situacao])
 
 
 
@@ -131,19 +134,17 @@ export const MedicalConsultations = ({ navigation }) => {
                     ({ item }) =>
                         statusLista == item.situacao.situacao && (
                             <AppointmentCard
+                                consultas={item}
                                 situacao={item.situacao.situacao}
                                 profile={"Medico"}
-
-                                onPressCancel={() => MostrarModal('cancelar, item')}
+                                onPressCancel={() => MostrarModal('cancelar', item)}
                                 onPressAppointment={() => MostrarModal('inserirProntuario', item)}
-
-                                // onPressCancel={() => setShowModalCancel(true)}
-                                // onPressAppointment={() => setShowModalAppointment(true)}
-
+                                source={{uri: item.paciente.idNavigation.foto}}
                                 navigation={navigation}
                                 ProfileNameCard={item.paciente.idNavigation.nome}
                                 Age={dateFormatDbToView(item.paciente.dataNascimento)}
                                 TipoConsulta={functionPrioridade(item.prioridade.prioridade)}
+                                dataConsulta={item.dataConsulta}
                             />
                         )
                 }
@@ -155,6 +156,9 @@ export const MedicalConsultations = ({ navigation }) => {
             <CancellationModal
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
+                setSituacao={setSituacao}
+                navigation={navigation}
+                consulta={consultaSelecionada}
             />
 
             {/* Modal ver prontuario */}

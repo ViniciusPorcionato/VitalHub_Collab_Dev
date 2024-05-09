@@ -1,5 +1,5 @@
 import { Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Camera, CameraType } from 'expo-camera';
+import { CameraType, CameraView, FlashMode } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library'
 import { useEffect, useState, useRef } from 'react';
 import { FontAwesome, AntDesign, Ionicons } from '@expo/vector-icons'
@@ -7,21 +7,55 @@ import { Button, ButtonEdit } from '../../components/Button/ButtonStyle';
 import { ButtonTitle } from '../../components/Title/TitleStyle';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ContainerCamera } from '../../components/Container/ContainerStyle';
+import { LastPhoto } from '../CameraUser/Styles';
 
-export const CameraPrescription = ({ navigation }) => {
+
+import * as ImagePicker from 'expo-image-picker'
+
+export const CameraPrescription = ({ navigation, route }) => {
 
   const cameraRef = useRef(null)
   const [openModal, setOpenModal] = useState(false)
   const [photo, setPhoto] = useState(null)
-  const [tipoCamera, setTipoCamera] = useState(CameraType.front)
-  const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off)
+  // const [tipoCamera, setTipoCamera] = useState(CameraView.front)
+  const [tipoCamera, setTipoCamera] = useState('front')
+  const [flashMode, setFlashMode] = useState('off')
+  // const [flashMode, setFlashMode] = useState(FlashMode.off)
+
+
+  const [lastPhoto, setLastPhoto] = useState();
+
+  async function GetLatesPhoto() {
+    const { assets } = await MediaLibrary.getAssetsAsync({ sortBy: [[MediaLibrary.SortBy.creationTime, false]], first: 1 });
+
+    if (assets.length > 0) {
+      setLastPhoto(assets[0].uri)
+    }
+  }
+
+  async function SelectImageGallery() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1
+    });
+
+    if (!result.canceled) {
+      setPhoto(result.assets[0].uri)
+      setOpenModal(true)
+    }
+  }
+
+  useEffect(() => {
+    GetLatesPhoto()
+  }, [])
+
 
   useEffect(() => {
     (async () => {
-      const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync()
+      const { status: cameraStatus } = await CameraView.requestCameraPermissionsAsync()
       const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
     })();
-  }, [])
+  }, []);
 
   async function CapturePhoto() {
     if (cameraRef) {
@@ -29,22 +63,7 @@ export const CameraPrescription = ({ navigation }) => {
 
       setPhoto(photo.uri)
       setOpenModal(true)
-
-      console.log(photo)
     }
-  }
-
-  async function UploadPhoto() {
-
-    console.log(photo);
-
-    navigation.navigate("ViewPrescription", { photoUri: photo })
-
-    // await MediaLibrary.createAssetAsync(photo).then(() => {
-    //   alert('Foto salva com sucesso')
-    // }).catch(error => {
-    //   alert('Não foi possivel salvar a foto')
-    // })
   }
 
   function ClearPhoto() {
@@ -54,9 +73,9 @@ export const CameraPrescription = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Camera
+      <CameraView
         ref={cameraRef}
-        type={tipoCamera}
+        facing={tipoCamera}
         style={styles.camera}
         flashMode={flashMode}
         ratio='16:9'>
@@ -64,36 +83,55 @@ export const CameraPrescription = ({ navigation }) => {
         <View style={styles.viewFlip}>
           <TouchableOpacity
             style={styles.btnFlip}
-            onPress={() => setTipoCamera(tipoCamera === CameraType.front ? CameraType.back : CameraType.front)}>
+            onPress={() => setTipoCamera(tipoCamera === 'front' ? 'back' : 'front')}>
             <Ionicons name='camera-reverse' size={40} color="#FFF" />
 
           </TouchableOpacity>
         </View>
 
-      </Camera>
+      </CameraView>
 
       <ContainerCamera>
 
+        <TouchableOpacity onPress={() => SelectImageGallery()}>
+
+          {
+            lastPhoto != null
+              ? (
+                <LastPhoto
+                  source={{ uri: lastPhoto }}
+                />
+
+              ) : (null
+
+              )
+          }
+
+        </TouchableOpacity>
 
 
-      <TouchableOpacity
-        style={styles.btnFlash}
-        onPress={() => setFlashMode(flashMode === Camera.Constants.FlashMode.off
-          ? Camera.Constants.FlashMode.on
-          : Camera.Constants.FlashMode.off)}
-      >
 
-        <FontAwesome name="flash" size={30} color={"black"} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btnFlash}
+          onPress={() => setFlashMode(flashMode === 'off'
+            ? 'on'
+            : 'off')}
+          // onPress={() => setFlashMode(flashMode === FlashMode.off
+          //   ? FlashMode.on
+          //   : FlashMode.off)}
+        >
+
+          <FontAwesome name="flash" size={30} color={"black"} />
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.btnCapture} onPress={() => CapturePhoto()}>
           <FontAwesome name='camera' size={23} color="#FFF" />
         </TouchableOpacity>
-      
+
         <TouchableOpacity style={styles.btnCancel} onPress={() => navigation.navigate("ViewPrescription")}>
           <MaterialIcons name="cancel" size={30} color="black" />
         </TouchableOpacity>
-        
+
       </ContainerCamera>
 
 
@@ -114,7 +152,7 @@ export const CameraPrescription = ({ navigation }) => {
               <AntDesign name='closecircle' size={50} color="#ff0000" />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.btnUpload} onPress={() => UploadPhoto()}>
+            <TouchableOpacity style={styles.btnUpload} onPress={() => navigation.replace("ViewPrescription", { photoUri: photo, consultaId: route.params.id })}>
               <FontAwesome name='upload' size={50} color="#FFF" />
             </TouchableOpacity>
 
@@ -159,15 +197,14 @@ const styles = StyleSheet.create({
   },
 
   btnCapture: {
-    padding: 20,
     margin: 20,
+    padding: 20,
     borderRadius: 50,
     backgroundColor: "#121212",
     justifyContent: 'center',
     alignItems: 'center',
   },
   btnCancel: {
-    padding: 20,
     margin: 20,
     borderRadius: 50,
     backgroundColor: "transparent",
@@ -176,21 +213,21 @@ const styles = StyleSheet.create({
   },
   btnClear: {
     margin: 20,
-    borderRadius: 50,
+    borderRadius: 10,
     backgroundColor: "#FFF",
     justifyContent: 'center',
     alignItems: 'center',
   },
   btnUpload: {
     margin: 20,
-    borderRadius: 50,
+    borderRadius: 10,
     backgroundColor: "#000",
     justifyContent: 'center',
     alignItems: 'center',
   },
   btnFlash: {
-    padding: 20,
-    marginBottom: 20,
+    marginRight: 10,
+    marginLeft: 50,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center'

@@ -4,11 +4,35 @@ import { Logo } from "../../components/Logo/LogoStyle";
 import { ButtonTitle, Subtitle, Title } from "../../components/Title/TitleStyle";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/ButtonStyle";
+import { useState } from "react";
+import api from "../../Service/Service";
 
-export const RedefinePassword = ({navigation}) => {
+export const RedefinePassword = ({ navigation, route }) => {
+
+    const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
+
+
+    async function AlterarSenha() {
+
+        if (senha === confirmarSenha) {
+
+            await api.put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`, {
+                senhaNova: senha
+            }).then(() => {
+                navigation.replace("Login")
+            }).catch(error => {
+                console.log(error);
+            })
+        }else{
+            alert("Senhas incompatíveis")
+        }
+
+    }
+
+
     return (
         <Container>
-
 
             <ConteinerIcon onPress={() => navigation.replace("Login")}>
 
@@ -29,8 +53,8 @@ export const RedefinePassword = ({navigation}) => {
                 keyboardType={'text'}
                 placeholderTextColor={'#34898F'}
                 secureTextEntry={true}
-            // value={fieldValue}
-            // onChangeText={onChangeText}
+                value={senha}
+                onChangeText={(txt) => setSenha(txt)}
             />
 
             <Input
@@ -38,11 +62,11 @@ export const RedefinePassword = ({navigation}) => {
                 keyboardType={'text'}
                 placeholderTextColor={'#34898F'}
                 secureTextEntry={true}
-            // value={fieldValue}
-            // onChangeText={onChangeText}
+                value={confirmarSenha}
+                onChangeText={(txt) => setConfirmarSenha(txt)}
             />
 
-            <Button onPress={() => navigation.replace("Login")}>
+            <Button onPress={() => AlterarSenha()}>
                 <ButtonTitle>Confirmar nova senha</ButtonTitle>
             </Button>
 

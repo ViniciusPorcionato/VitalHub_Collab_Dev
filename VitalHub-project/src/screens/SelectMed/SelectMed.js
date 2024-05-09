@@ -9,10 +9,11 @@ import api from "../../Service/Service";
 
 
 
-export const SelectMed = ({ navigation }) => {
+export const SelectMed = ({ navigation, route }) => {
 
     //Criar o state para receber a lista de médico (Array)
     const [medicos, setMedicos] = useState([]);
+    const [medico, setMedico] = useState(null)
 
     //Criar um useEffect para a chamda da função
     useEffect(() => {
@@ -20,7 +21,7 @@ export const SelectMed = ({ navigation }) => {
         //Criar a função para obter a lista de médico da api e setar no state
         async function getMedico() {
             try {
-                const promise = await api.get("/Medicos")
+                const promise = await api.get(`/Medicos/BuscarPorIdClinica?id=${route.params.agendamento.clinicaId}`)
 
                 setMedicos(promise.data)
 
@@ -31,18 +32,15 @@ export const SelectMed = ({ navigation }) => {
 
         getMedico()
 
-    }, [])
+    }, []);
 
-    //Passar os dados do state(array) para o flatList
-    //Passar o medico como props no medicalcard
-
-    //Array mocado
-    // const Medicos = [
-    //     { id: 1, nome: "Dr Kaua", image: "https://github.com/kauameloo.png", especialidade: "Cirurgião, Cardiologista" },
-    //     { id: 2, nome: "Dr Paladino", image: "https://github.com/MateusPaladino-29.png", especialidade: "Demartologa, Esteticista" },
-    //     { id: 3, nome: "Dr Eduardo", image: "https://github.com/Duduuz7.png", especialidade: "Clínico, Pediatra" },
-
-    // ];
+    function handleContinue() {
+        navigation.replace("SelectDate", {agendamento:  {
+            ...route.params.agendamento,
+            ...medico
+        } })
+        
+    }
 
 
     return (
@@ -62,9 +60,10 @@ export const SelectMed = ({ navigation }) => {
                     ({ item }) =>
                     (
                         <SelectMedCard
-                            // medico={item.item}
                             ProfileNameCard={item.idNavigation.nome}
                             textCard={item.especialidade.especialidade1}
+                            medico={item}
+                            setMedico={setMedico}
                             // imageUrl={{ uri: item.image }}
                         />
                     )
@@ -72,7 +71,7 @@ export const SelectMed = ({ navigation }) => {
 
             />
 
-            <Button onPress={() => navigation.replace("SelectDate")}>
+            <Button onPress={() => handleContinue()}>
                 <ButtonTitle>Continuar</ButtonTitle>
             </Button>
 

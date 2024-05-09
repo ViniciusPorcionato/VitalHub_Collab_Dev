@@ -53,8 +53,6 @@ export const CreateAccount = ({ navigation }) => {
 
         }
         else {
-            console.log("Senhas inválidas")
-
             Alert.alert(
                 "Erro", "Senha inválida"
             )

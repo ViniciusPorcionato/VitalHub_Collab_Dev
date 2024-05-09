@@ -101,9 +101,13 @@ margin-bottom: 30px;
 `
 
 export const ContainerCamera = styled.View`
-width: 90%;
+width: 100%;
 flex-direction: row;
-justify-content: space-evenly;
 padding-left: 60px;
+`
+
+export const ContainerProfile = styled.View`
+width: 100%;
+height: auto;
 `
 

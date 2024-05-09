@@ -6,12 +6,27 @@ import { Button } from "../../components/Button/ButtonStyle"
 import { ButtonTitle, LabelSelect, TitleSelect } from "../../components/Title/TitleStyle"
 import { LinkCodeModal } from "../../components/Links/Links"
 import { ConfirmModal } from "../../components/ConfirmModal/ConfirmModal"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
-export const SelectDate = ({navigation}) => {
+export const SelectDate = ({ navigation, route }) => {
+
+
+    const [agendamento, setAgendamento] = useState(null)
+    const [dataSelecionada, setDataSelecionada] = useState("");
+    const [horaSelecionada, setHoraSelecionada] = useState("");
 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+    function handleContinue() {
+
+        setAgendamento({
+            ...route.params.agendamento,
+            dataConsulta: `${dataSelecionada} ${horaSelecionada}`
+        });
+
+        setShowConfirmModal(true);
+    }
 
     return (
         <Container>
@@ -20,13 +35,18 @@ export const SelectDate = ({navigation}) => {
 
             <TitleSelect>Selecionar Data</TitleSelect>
 
-            <CalendarComponent />
+            <CalendarComponent 
+                setDataSelecionada={setDataSelecionada}
+                dataSelecionada={dataSelecionada}
+            />
 
             <LabelSelect>Selecione um horário disponível</LabelSelect>
 
-            <InputSelect />
+            <InputSelect 
+                setHoraSelecionada={setHoraSelecionada}
+            />
 
-            <Button onPress={() => setShowConfirmModal(true)}>
+            <Button onPress={() => handleContinue()}>
                 <ButtonTitle>Continuar</ButtonTitle>
             </Button>
 
@@ -36,6 +56,7 @@ export const SelectDate = ({navigation}) => {
                 visible={showConfirmModal}
                 setShowConfirmModal={setShowConfirmModal}
                 navigation={navigation}
+                agendamento={agendamento}
             />
 
         </Container>

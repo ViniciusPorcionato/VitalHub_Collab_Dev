@@ -7,6 +7,7 @@ import { ButtonModalContainer, ContainerMedicalRecord, ContainerModalEnd } from 
 import { BookModalContainer, ModalContent } from "./BookModalStyles"
 import { SmallButtonModal } from "../Button/Button"
 import { LargeInputBoxModal } from "../BoxInput/BoxInput"
+import { useState } from "react"
 
 export const BookModal = ({
     navigation,
@@ -14,6 +15,16 @@ export const BookModal = ({
     setShowModalAppointment,
     ...rest
 }) => {
+
+    const [agendamento , setAgendamento] = useState(null);
+
+    async function handleContinue(){
+        
+        await setShowModalAppointment(false);
+
+        navigation.replace("SelectClinic", {agendamento : agendamento})
+    }
+
     return (
         <Modal
             {...rest}
@@ -33,9 +44,21 @@ export const BookModal = ({
 
                     <ButtonModalContainer>
 
-                        <SmallButtonModal text={'Rotina'} />
-                        <SmallButtonModal text={'Exame'} />
-                        <SmallButtonModal text={'Urgência'} />
+                        <SmallButtonModal text={'Rotina'} onPress={() => setAgendamento({
+                            ... agendamento, //Manter as informações que ja existe dentro do state
+                            prioridadeId : '39854132-73A5-441A-946B-6rADDEB6A5CE4',
+                            prioridadeLabel: 'Rotina'
+                        })} />
+                        <SmallButtonModal text={'Exame'} onPress={() => setAgendamento({
+                            ...agendamento,//Manter as informações que ja existe dentro do state
+                            prioridadeId: '56591A49-0E1F-4D04-AB0D-71D06C21CFEE',
+                            prioridadeLabel: 'Exame'
+                        })} />
+                        <SmallButtonModal text={'Urgência'} onPress={() => setAgendamento({
+                            ...agendamento,//Manter as informações que ja existe dentro do state
+                            prioridadeId:  'D8141A81-A185-45BD-AEEE-A9E416669BF7',
+                            prioridadeLabel: 'Urgência'
+                        })}/>
 
                     </ButtonModalContainer>
 
@@ -46,18 +69,22 @@ export const BookModal = ({
                         textLabel={"Informe a localização desejada"}
                         placeholder={"Informe a localização"}
                         editable={true}
+                        onChangeText={(txt) => setAgendamento({
+                            ...agendamento,//Manter as informações que ja existe dentro do state
+                            localizacao: txt
+                        })}
+                        fieldValue={agendamento ? agendamento.localizacao : null}
                     />
 
                     <ContainerModalEnd>
 
-                        <Button onPress={() => navigation.replace("SelectClinic")}>
+                        <Button onPress={() => handleContinue()}>
                             <ButtonTitle>Continuar</ButtonTitle>
                         </Button>
 
                         <LinkCodeModal onPress={() => setShowModalAppointment(false)}>Cancelar</LinkCodeModal>
 
                     </ContainerModalEnd>
-
 
                 </ModalContent>
 

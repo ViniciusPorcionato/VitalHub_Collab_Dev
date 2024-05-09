@@ -20,10 +20,16 @@ align-items: center;
 justify-content: center;
 `
 
-export const ImagePrescription = styled.Image`
-width: 220px;
+export const ImagePrescriptionText = styled.Image`
+width: 300px;
 height: 24px;
 align-self: center;
+`
+export const ImagePrescription = styled.Image`
+width: 100%;
+height: 180px;
+align-self: center;
+border-radius: 15px;
 `
 
 

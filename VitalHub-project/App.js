@@ -22,6 +22,12 @@ import { Main, MainMed } from './src/screens/Main/Main';
 import { CameraPrescription } from './src/screens/CameraPrescription/CameraPrescription';
 
 
+import * as MediaLibrary from 'expo-media-library'
+import * as ImagePicker from 'expo-image-picker'
+import { useEffect } from 'react';
+import { CameraUser } from './src/screens/CameraUser/CameraUser';
+
+
 
 
 const Stack = createNativeStackNavigator();
@@ -40,9 +46,20 @@ export default function App() {
 
   });
 
+  useEffect(() => {
+        (async () => {
+            const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
+            const { status: imageStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync()
+        })();
+    }, [])
+
   if (!fontsLoaded && !fontError) {
     return null;
   }
+
+
+
+
 
   return (
 
@@ -165,6 +182,12 @@ export default function App() {
           name='CameraPrescription'
           component={CameraPrescription}
           options={{ title: "CameraPrescription" }}
+        />
+
+        <Stack.Screen
+          name='CameraUser'
+          component={CameraUser}
+          options={{ title: "CameraUser" }}
         />
 
       </Stack.Navigator>

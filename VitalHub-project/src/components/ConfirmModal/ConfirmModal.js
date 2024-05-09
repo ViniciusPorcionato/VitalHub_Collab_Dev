@@ -1,15 +1,47 @@
-import { Modal } from "react-native"
+import { ActivityIndicator, Modal } from "react-native"
 import { ConfirmModalContainer, ConfirmModalContent, ConfirmModalText, ConfirmSubTitle, ConfirmTitle, ContainerModalConfirm, ContainerSub } from "./Style"
 import { ButtonTitle, Title } from "../Title/TitleStyle"
 import { Button } from "../Button/ButtonStyle"
 import { LinkCodeModal } from "../Links/Links"
+import moment from "moment"
+import { useEffect, useState } from "react"
+import api from "../../Service/Service"
+import { userDecodeToken } from "../../Utils/Auth"
 
 export const ConfirmModal = ({
     navigation,
     visible,
     setShowConfirmModal,
+    agendamento,
     ...rest
 }) => {
+
+    const [profile, setProfile] = useState(null);
+
+    useEffect(() => {
+        profileLoad();
+    }, [])
+
+
+    async function profileLoad() {
+        const token = await userDecodeToken()
+        setProfile(token)
+    }
+
+    async function handleConfirm() {
+        await api.post(`/Consultas/Cadastrar`, {
+            ...agendamento,
+            pacienteId: profile.id,
+            situacaoId: 'AD2E8A0A-F1F9-4883-8561-EDA517806608'
+        }).then(async () => {
+            await setShowConfirmModal(false)
+
+            navigation.replace("Main")
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
     return (
         <Modal
             {...rest}
@@ -17,45 +49,51 @@ export const ConfirmModal = ({
             transparent={true}
             animationType="fade"
         >
-            {/* Container */}
             <ConfirmModalContainer>
 
-                {/* Content */}
-                <ConfirmModalContent>
+                {
+                    agendamento ? (
 
-                    <Title>Agendar consulta</Title>
+                        <ConfirmModalContent>
 
-                    <ConfirmModalText>Consulte os dados selecionados para a sua consulta</ConfirmModalText>
+                            <Title>Agendar consulta</Title>
 
-                    <ContainerSub>
-                        
-                        <ConfirmTitle>Data da consulta</ConfirmTitle>
-                        <ConfirmSubTitle>1 de Novembro de 2023</ConfirmSubTitle>
+                            <ConfirmModalText>Consulte os dados selecionados para a sua consulta</ConfirmModalText>
 
-                        <ConfirmTitle>Médico(a) da consulta</ConfirmTitle>
-                        <ConfirmSubTitle>Dra Alessandra</ConfirmSubTitle>
-                        <ConfirmSubTitle>Demartologa, Esteticista</ConfirmSubTitle>
+                            <ContainerSub>
 
-                        <ConfirmTitle>Local da consulta</ConfirmTitle>
-                        <ConfirmSubTitle>São Paulo, SP</ConfirmSubTitle>
+                                <ConfirmTitle>Data da consulta</ConfirmTitle>
+                                <ConfirmSubTitle>{moment(agendamento.dataConsulta).format("DD/MM/YYYY HH:mm")}</ConfirmSubTitle>
 
-                        <ConfirmTitle>Tipo da consulta</ConfirmTitle>
-                        <ConfirmSubTitle>Rotina</ConfirmSubTitle>
+                                <ConfirmTitle>Médico(a) da consulta</ConfirmTitle>
+                                <ConfirmSubTitle>{agendamento.medicoNome}</ConfirmSubTitle>
+                                <ConfirmSubTitle>{agendamento.medicoEspecialidade}</ConfirmSubTitle>
 
-                    </ContainerSub>
+                                <ConfirmTitle>Local da consulta</ConfirmTitle>
+                                <ConfirmSubTitle>{agendamento.localizacao}</ConfirmSubTitle>
 
-                    <ContainerModalConfirm>
+                                <ConfirmTitle>Tipo da consulta</ConfirmTitle>
+                                <ConfirmSubTitle>{agendamento.prioridadeLabel}</ConfirmSubTitle>
 
-                        <Button onPress={() => navigation.replace("Main")}>
-                            <ButtonTitle>Confirmar</ButtonTitle>
-                        </Button>
+                            </ContainerSub>
 
-                        <LinkCodeModal onPress={() => setShowConfirmModal(false)}>Cancelar</LinkCodeModal>
+                            <ContainerModalConfirm>
 
-                    </ContainerModalConfirm>
+                                <Button onPress={() => handleConfirm()}>
+                                    <ButtonTitle>Confirmar</ButtonTitle>
+                                </Button>
+
+                                <LinkCodeModal onPress={() => setShowConfirmModal(false)}>Cancelar</LinkCodeModal>
+
+                            </ContainerModalConfirm>
 
 
-                </ConfirmModalContent>
+                        </ConfirmModalContent>
+                    ) : (
+                        <ActivityIndicator />
+                    )
+                }
+
 
             </ConfirmModalContainer>
 

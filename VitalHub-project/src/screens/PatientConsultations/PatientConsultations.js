@@ -1,179 +1,182 @@
-import { useEffect, useState } from "react"
-import { BtnListAppointment } from "../../components/BtnListAppointment/BtnListAppointment"
-import { CalendarHome } from "../../components/Calendar/Calendar"
-import { Container } from "../../components/Container/ContainerStyle"
-import { Header, HeaderPatient } from "../../components/Header/Header"
-import { FilterAppointment } from "../MedicalConsultations/MedicalConsultationsStyles"
-import { ListComponent } from "../../components/List/ListStyles"
-import { AppointmentCard } from "../../components/AppointmentCard/AppointmentCard"
-import { FontAwesome6 } from '@expo/vector-icons';
-import { BtnIcon } from "./Style"
-import { BookModal } from "../../components/BookModal/BookModal"
-import { QueryDoctorModal } from "../../components/QueryModal/QueryModal"
-import { CancellationModal } from "../../components/CancellationModal/CancellationModal"
-import { userDecodeToken } from "../../Utils/Auth"
-import { dateFormatDbToView, functionPrioridade } from "../../Utils/StringFunction"
-import api from "../../Service/Service"
-import moment from "moment"
+import { useEffect, useState } from "react";
+import { BtnListAppointment } from "../../components/BtnListAppointment/BtnListAppointment";
+import { CalendarHome } from "../../components/Calendar/Calendar";
+import { Container } from "../../components/Container/ContainerStyle";
+import { Header, HeaderPatient } from "../../components/Header/Header";
+import { FilterAppointment } from "../MedicalConsultations/MedicalConsultationsStyles";
+import { ListComponent } from "../../components/List/ListStyles";
+import { AppointmentCard } from "../../components/AppointmentCard/AppointmentCard";
+import { FontAwesome6 } from "@expo/vector-icons";
+import { BtnIcon } from "./Style";
+import { BookModal } from "../../components/BookModal/BookModal";
+import { QueryDoctorModal } from "../../components/QueryModal/QueryModal";
+import { CancellationModal } from "../../components/CancellationModal/CancellationModal";
+import { userDecodeToken } from "../../Utils/Auth";
+import {
+  dateFormatDbToView,
+  functionPrioridade,
+} from "../../Utils/StringFunction";
+import api from "../../Service/Service";
+import moment from "moment";
 
-export const PatientConsultations = ({ navigation }) => {
+export const PatientConsultations = ({ navigation, route }) => {
+  // state para exibição dos modais
+  const [showModalCancel, setShowModalCancel] = useState(false);
+  const [showModalAppointment, setShowModalAppointment] = useState(false);
+  const [showQueryModal, setShowQueryModal] = useState(false);
 
-    // state para exibição dos modais 
-    const [showModalCancel, setShowModalCancel] = useState(false)
-    const [showModalAppointment, setShowModalAppointment] = useState(false)
-    const [showQueryModal, setShowQueryModal] = useState(false)
+  //state para receber o array de consultas
+  const [consultas, setConsultas] = useState([]);
+  const [role, setRole] = useState("");
+  const [profile, setProfile] = useState({});
+  const [dataConsulta, setDataConsulta] = useState("");
 
-    //state para receber o array de consultas
-    const [consultas, setConsultas] = useState([]);
-    const [profile, setProfile] = useState({})
-    const [dataConsulta, setDataConsulta] = useState('')
+  const [consultaSelecionada, setConsultaSelecionada] = useState(null);
 
-    const [consultaSelecionada, setConsultaSelecionada] = useState(null)
+  const [situacao, setSituacao] = useState("");
 
+  const [imageProfile, setImageProfile] = useState(null);
 
-    async function ProfileLoad() {
+  async function ProfileLoad() {
+    const token = await userDecodeToken();
 
-        const token = await userDecodeToken();
+    if (token != null) {
+      setProfile(token);
+      setRole(token.role);
 
-        if (token != null) {
-
-            setProfile(token)
-
-            setDataConsulta(moment().format('YYYY-MM-DD'))
-        }
+      setDataConsulta(moment().format("YYYY-MM-DD"));
     }
+  }
 
+  function MostrarModal(modal, consulta) {
+    setConsultaSelecionada(consulta);
 
-    function MostrarModal(modal, consulta) {
-
-        setConsultaSelecionada(consulta)
-
-        if (modal == 'cancelar') {
-            setShowModalCancel(true)
-
-        } else{
-            setShowQueryModal( consulta.situacao.situacao === "Agendado" ? true : false )
-        }
+    if (modal == "cancelar") {
+      setShowModalCancel(true);
+      setSituacao(consulta.situacao.situacao);
+    } else {
+      setShowQueryModal(
+        consulta.situacao.situacao === "Agendado" ? true : false
+      );
     }
+  }
 
+  async function GetConsultas() {
+    //Chamando o metodo da api
+    await api
+      .get(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${profile.id}`)
+      .then((response) => {
+        setConsultas(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-    async function GetConsultas() {
+  //Criar um useEffect para a chamando da função
+  useEffect(() => {
+    ProfileLoad();
+  }, []);
 
-        //Chamando o metodo da api
-        await api.get(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${profile.id}`
-        ).then(response => {
-            setConsultas(response.data)
-        }).catch(error => {
-            console.log(error);
-        })
-
+  //Criar um useEffect para a chamando da função
+  useEffect(() => {
+    if (dataConsulta != "") {
+      GetConsultas();
     }
+  }, [dataConsulta, situacao]);
 
-    //Criar um useEffect para a chamando da função
-    useEffect(() => {
-        ProfileLoad();
-    }, [])
+  // state para o estado da lista(card)
+  const [statusLista, setStatusLista] = useState("Agendado");
 
-    //Criar um useEffect para a chamando da função
-    useEffect(() => {
-        if (dataConsulta != '') {
-            GetConsultas()
+  return (
+    <Container>
+      <HeaderPatient
+        navigation={navigation}
+        // source={imageProfile.idNavigation.foto}
+      />
+
+      <CalendarHome setDataConsulta={setDataConsulta} />
+
+      <FilterAppointment>
+        {/* Agendadas */}
+        <BtnListAppointment
+          textButton={"Agendadas"}
+          clickButton={statusLista === "Agendado"}
+          onPress={() => setStatusLista("Agendado")}
+        />
+
+        {/* Realizadas */}
+        <BtnListAppointment
+          textButton={"Realizadas"}
+          clickButton={statusLista === "Realizado"}
+          onPress={() => setStatusLista("Realizado")}
+        />
+
+        {/* Canceladas */}
+        <BtnListAppointment
+          textButton={"Canceladas"}
+          clickButton={statusLista === "Cancelado"}
+          onPress={() => setStatusLista("Cancelado")}
+        />
+      </FilterAppointment>
+
+      {/* lista */}
+      <ListComponent
+        data={consultas}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) =>
+          statusLista == item.situacao.situacao && (
+            <AppointmentCard
+              consultas={item}
+              situacao={item.situacao.situacao}
+              onPressQuery={() => MostrarModal("localConsulta", item)}
+              onPressCancel={() => MostrarModal("cancelar", item)}
+              onPressAppointment={
+                role === "Medico"
+                  ? () => MostrarModal("prontuario", item)
+                  : () =>
+                      navigation.replace("ViewPrescription", {
+                        consultaId: item.id,
+                      })
+              }
+              source={{uri: item.medicoClinica.medico.idNavigation.foto}}
+              navigation={navigation}
+              ProfileNameCard={item.medicoClinica.medico.idNavigation.nome}
+              Age={item.medicoClinica.medico.crm}
+              TipoConsulta={functionPrioridade(item.prioridade.prioridade)}
+              dataConsulta={item.dataConsulta}
+            />
+          )
         }
-    }, [dataConsulta])
+      />
 
+      <BtnIcon onPress={() => setShowModalAppointment(true)}>
+        <FontAwesome6 name="stethoscope" size={24} color="white" />
+      </BtnIcon>
 
-    // state para o estado da lista(card)
-    const [statusLista, setStatusLista] = useState("Agendado")
+      {/* Modal para agendar uma nova consulta */}
+      <BookModal
+        visible={showModalAppointment}
+        setShowModalAppointment={setShowModalAppointment}
+        navigation={navigation}
+      />
 
-    return (
-        <Container>
+      {/* Modal para ver o local da consulta */}
+      <QueryDoctorModal
+        consulta={consultaSelecionada}
+        visible={showQueryModal}
+        setShowQueryModal={setShowQueryModal}
+        navigation={navigation}
+      />
 
-            <HeaderPatient
-                navigation={navigation}
-            />
-
-            <CalendarHome
-                setDataConsulta={setDataConsulta}
-            />
-
-            <FilterAppointment>
-
-                {/* Agendadas */}
-                <BtnListAppointment
-                    textButton={"Agendadas"}
-                    clickButton={statusLista === "Agendado"}
-                    onPress={() => setStatusLista("Agendado")}
-                />
-
-                {/* Realizadas */}
-                <BtnListAppointment
-                    textButton={"Realizadas"}
-                    clickButton={statusLista === "Realizado"}
-                    onPress={() => setStatusLista("Realizado")}
-                />
-
-                {/* Canceladas */}
-                <BtnListAppointment
-                    textButton={"Canceladas"}
-                    clickButton={statusLista === "Cancelado"}
-                    onPress={() => setStatusLista("Cancelado")}
-                />
-
-            </FilterAppointment>
-
-            {/* lista */}
-            <ListComponent
-
-                data={consultas}
-                keyExtractor={(item) => item.id}
-                renderItem={
-                    ({ item }) =>
-                        statusLista == item.situacao.situacao && (
-                            <AppointmentCard
-                                situacao={item.situacao.situacao}
-                                onPressQuery={() => MostrarModal('localConsulta', item)}
-
-                                onPressCancel={() => MostrarModal('cancelar', item)}
-                                onPressAppointment={() => MostrarModal('prontuario', item)}
-
-                                navigation={navigation}
-                                ProfileNameCard={item.medicoClinica.medico.idNavigation.nome}
-                                Age={item.medicoClinica.medico.crm}
-                                TipoConsulta={functionPrioridade(item.prioridade.prioridade)}
-                            />
-                        )
-                }
-
-            />
-
-            <BtnIcon onPress={() => setShowModalAppointment(true)}>
-                <FontAwesome6 name="stethoscope" size={24} color="white" />
-            </BtnIcon>
-
-            {/* Modal para agendar uma nova consulta */}
-            <BookModal
-                visible={showModalAppointment}
-                setShowModalAppointment={setShowModalAppointment}
-                navigation={navigation}
-            />
-
-            {/* Modal para ver o local da consulta */}
-            <QueryDoctorModal
-                consulta={consultaSelecionada}
-
-                visible={showQueryModal}
-                setShowQueryModal={setShowQueryModal}
-                navigation={navigation}
-            />
-
-            {/* Modal para cancelar a consulta */}
-            <CancellationModal
-                navigation={navigation}
-                visible={showModalCancel}
-                setShowModalCancel={setShowModalCancel}
-            />
-
-
-        </Container>
-    )
-}
+      {/* Modal para cancelar a consulta */}
+      <CancellationModal
+        navigation={navigation}
+        visible={showModalCancel}
+        setSituacao={setSituacao}
+        setShowModalCancel={setShowModalCancel}
+        consulta={consultaSelecionada}
+      />
+    </Container>
+  );
+};

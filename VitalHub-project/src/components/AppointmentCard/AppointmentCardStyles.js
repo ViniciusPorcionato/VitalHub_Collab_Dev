@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const ContainerCardList = styled.TouchableOpacity`
 width: 90%;
@@ -17,6 +17,11 @@ elevation: 5px;
 export const ContainerCardListClinic = styled(ContainerCardList)`
 height: 84px;
 justify-content: space-around;
+/* ${(props) => props.selected
+        ? css`
+border: 2px solid #496BBA;
+`
+        : null}  */
 `
 
 export const ProfileImage = styled.Image`
@@ -88,7 +93,7 @@ export const ButtonCard = styled.TouchableOpacity`
 export const ButtonTextCard = styled.Text`
 font-size: 12px;
 font-family: MontserratAlternates_500Medium;
-color: ${(props) => props.situacao == "pendente" ? "#C81D25" : "#344F8F"};
+color: ${(props) => props.situacao == "Agendado" ? "#C81D25" : "#344F8F"};
 `
 
 // CARD SELECT CLINIC
