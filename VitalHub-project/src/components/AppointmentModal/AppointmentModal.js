@@ -1,54 +1,84 @@
-import { Modal } from "react-native"
-import { AppointmentImageModal, AppointmentModalContent, AppointmentModalText, AppointmentPatientModal } from "./Style"
-import { LinkCodeModal } from "../Links/Links"
-import { ButtonModal } from "../Button/ButtonStyle"
-import { ButtonTitle, Title } from "../Title/TitleStyle"
-import { ContainerMedicalRecord } from "../Container/ContainerStyle"
+import { Modal } from "react-native";
+import {
+  AppointmentImageModal,
+  AppointmentModalContent,
+  AppointmentModalText,
+  AppointmentPatientModal,
+} from "./Style";
+import { LinkCodeModal } from "../Links/Links";
+import { ButtonModal } from "../Button/ButtonStyle";
+import { ButtonTitle, Title } from "../Title/TitleStyle";
+import { ContainerMedicalRecord } from "../Container/ContainerStyle";
+import { useEffect } from "react";
+import moment from "moment";
 
 export const AppointmentModal = ({
-    navigation,
-    consulta,
-    roleUsuario,
-    visible,
-    setShowModalAppointment,
-    ...rest
+  navigation,
+  roleUsuario,
+  visible,
+  setShowModalAppointment,
+  route,
+  consulta,
+  setSituacao,
+  ...rest
 }) => {
-    return (
-        <Modal
-            {...rest}
-            visible={visible}
-            transparent={true}
-            animationType="fade"
-        >
-            {/* Container */}
-            <AppointmentPatientModal>
+  // console.log(route.params.consulta);
 
-                {/* Content */}
-                <AppointmentModalContent>
+  //Funcao para lidar com a chamada de notificacao
+  const HandleCallNotifications = async () => {
+    await api
+      .put(`Consultas/Status?idConsulta=${consulta.id}&status=Agendado`)
+      .then(() => {
+        setSituacao("Canceladas");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-                    <AppointmentImageModal source={require('../../assets/appointmentmodal.png')} />
+    navigation.replace("MedicalRecord", {
+      consulta: consulta.id,
+    });
+  };
 
-                    <Title>Niccole Sarga</Title>
-                   
-                    <ContainerMedicalRecord>
-                        
-                        <AppointmentModalText>22 anos</AppointmentModalText>
-                        <AppointmentModalText>niccole.sarga@gmail.com</AppointmentModalText>
+  return (
+    <Modal {...rest} visible={visible} transparent={true} animationType="fade">
+      {consulta != null && (
+        //  Container
+        <AppointmentPatientModal>
+          {/* Content  */}
+          <AppointmentModalContent>
+            <AppointmentImageModal
+              source={{ uri: consulta.paciente.idNavigation.foto }}
+            />
 
-                    </ContainerMedicalRecord>
+            <Title>{consulta.paciente.idNavigation.nome}</Title>
 
-                    <ButtonModal onPress={() => navigation.replace("MedicalRecord")}>
-                        <ButtonTitle>Inserir Prontuário</ButtonTitle>
-                    </ButtonModal>
+            <ContainerMedicalRecord>
+              <AppointmentModalText>
+                {`${
+                  moment().year() -
+                  moment(consulta.paciente.dataNascimento).format("YYYY")
+                } anos`}
+              </AppointmentModalText>
+              <AppointmentModalText>
+                {consulta.paciente.idNavigation.email}
+              </AppointmentModalText>
+            </ContainerMedicalRecord>
 
-                    <LinkCodeModal onPress={() => setShowModalAppointment(false)}>Cancelar</LinkCodeModal>
+            <ButtonModal
+              onPress={() => {
+                HandleCallNotifications();
+              }}
+            >
+              <ButtonTitle>Inserir Prontuário</ButtonTitle>
+            </ButtonModal>
 
-                </AppointmentModalContent>
-
-            </AppointmentPatientModal>
-
-
-
-        </Modal>
-    )
-}
+            <LinkCodeModal onPress={() => setShowModalAppointment(false)}>
+              Cancelar
+            </LinkCodeModal>
+          </AppointmentModalContent>
+        </AppointmentPatientModal>
+      )}
+    </Modal>
+  );
+};

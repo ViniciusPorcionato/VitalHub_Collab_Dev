@@ -1,68 +1,70 @@
-import { BoxInputMedical, BoxInputMedicalRecord } from '../../components/BoxInput/BoxInput'
-import { Button } from '../../components/Button/ButtonStyle'
-import { Container, ContainerPrescription, ScrollProfile } from '../../components/Container/ContainerStyle'
-import { LinkCode } from '../../components/Links/Links'
-import { UserImage } from '../../components/Logo/LogoStyle'
-import { ButtonTitle, SubtitlePrescription, TitleProfile } from '../../components/Title/TitleStyle'
+import { useState } from "react";
+import {
+  BoxInputMedical,
+  BoxInputMedicalRecord,
+} from "../../components/BoxInput/BoxInput";
+import { Button } from "../../components/Button/ButtonStyle";
+import {
+  Container,
+  ContainerPrescription,
+  ScrollProfile,
+} from "../../components/Container/ContainerStyle";
+import { LinkCode } from "../../components/Links/Links";
+import { UserImage } from "../../components/Logo/LogoStyle";
+import {
+  ButtonTitle,
+  SubtitlePrescription,
+  TitleProfile,
+} from "../../components/Title/TitleStyle";
+import api from "../../Service/Service";
 
 export const PrescriptionInsert = () => {
+  const [consulta, setConsulta] = useState("");
 
-    return (
-        <ScrollProfile
-            showsVerticalScrollIndicator={false}>
+  
+  return (
+    <ScrollProfile showsVerticalScrollIndicator={false}>
+      <Container>
+        <UserImage source={require("../../assets/MedicalImage.png")} />
 
-            <Container>
+        <TitleProfile>Dr. Claudio</TitleProfile>
 
-                <UserImage
-                    source={require('../../assets/MedicalImage.png')}
-                />
+        <ContainerPrescription>
+          <SubtitlePrescription>Cliníco geral</SubtitlePrescription>
 
-                <TitleProfile>Dr. Claudio</TitleProfile>
+          <SubtitlePrescription>CRM-15286</SubtitlePrescription>
+        </ContainerPrescription>
 
+        <BoxInputMedicalRecord
+          textLabel="Descrição da Consulta"
+          placeholder="Descrição"
+          keyType="text"
+          placeholderTextColor={"#34898F"}
+        />
 
-                <ContainerPrescription>
+        <BoxInputMedical
+          textLabel="Diagnóstico do paciente"
+          placeholder="Diagnóstico"
+          keyType="text"
+          placeholderTextColor={"#34898F"}
+        />
 
-                    <SubtitlePrescription>Cliníco geral</SubtitlePrescription>
+        <BoxInputMedicalRecord
+          textLabel="Prescrição Médica"
+          placeholder="Prescrição médica"
+          keyType="text"
+          placeholderTextColor={"#34898F"}
+        />
 
-                    <SubtitlePrescription>CRM-15286</SubtitlePrescription>
-        
-                </ContainerPrescription>
+        <BoxInputMedicalRecord
+          textLabel="Exames médicos"
+          placeholder="[!] Nenhuma foto informada"
+          keyType="text"
+          placeholderTextColor={"#34898F"}
+        />
 
-                <BoxInputMedicalRecord
-                    textLabel='Descrição da Consulta'
-                    placeholder='Descrição'
-                    keyType='text'
-                    placeholderTextColor={'#34898F'}
-                />
-
-                <BoxInputMedical
-                    textLabel='Diagnóstico do paciente'
-                    placeholder='Diagnóstico'
-                    keyType='text'
-                    placeholderTextColor={'#34898F'}
-                />            
-
-
-                <BoxInputMedicalRecord
-                    textLabel='Prescrição Médica'
-                    placeholder='Prescrição médica'
-                    keyType='text'
-                    placeholderTextColor={'#34898F'}
-                />
-
-                <BoxInputMedicalRecord
-                    textLabel='Exames médicos'
-                    placeholder='[!] Nenhuma foto informada'
-                    keyType='text'
-                    placeholderTextColor={'#34898F'}
-                />
-
-
-                <LinkCode>Voltar</LinkCode>
-
-
-            </Container>
-
-        </ScrollProfile>
-    )
-}
+        <LinkCode>Voltar</LinkCode>
+      </Container>
+    </ScrollProfile>
+  );
+};
