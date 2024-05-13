@@ -12,6 +12,7 @@ export const ContainerCardList = styled.TouchableOpacity`
   gap: 10px;
   elevation: 5px;
   /* box-shadow: 4px 4px 15px rgba(0,0,0, 0.08); */
+<<<<<<< HEAD
   ${(props) =>
     props.selected
       ? css`
@@ -20,10 +21,13 @@ export const ContainerCardList = styled.TouchableOpacity`
       : css`
           border: 1px solid white;
         `}
+=======
+>>>>>>> murilo
 `;
 
 export const ContainerCardListClinic = styled(ContainerCardList)`
   height: 84px;
+<<<<<<< HEAD
   justify-content: space-around;
 
   ${(props) =>
@@ -35,6 +39,9 @@ export const ContainerCardListClinic = styled(ContainerCardList)`
           border: 1px solid white;
         `}
 
+=======
+  justify-content: space-between;
+>>>>>>> murilo
 `;
 
 export const ProfileImage = styled.Image`
@@ -47,10 +54,16 @@ export const ContentCard = styled.View`
   width: 70%;
   gap: 11px;
 `;
+<<<<<<< HEAD
 export const ContentMedCard = styled.View`
   justify-content: center;
   width: 65%;
   gap: 11px;
+=======
+export const ContentMedCard = styled(ContentCard)`
+  justify-content: center;
+  width: 65%;
+>>>>>>> murilo
 `;
 
 export const DataProfileCard = styled.View`
@@ -67,8 +80,14 @@ export const ProfileName = styled.Text`
 `;
 
 export const ProfileData = styled.View`
+<<<<<<< HEAD
   flex-direction: row;
   gap: 15px;
+=======
+  gap: 5px;
+  flex-direction: row;
+  width: 250px;
+>>>>>>> murilo
 `;
 
 export const TextAge = styled.Text`
@@ -106,7 +125,11 @@ export const ButtonCard = styled.TouchableOpacity``;
 export const ButtonTextCard = styled.Text`
   font-size: 12px;
   font-family: MontserratAlternates_500Medium;
+<<<<<<< HEAD
   color: ${(props) => (props.situacao == "Agendado" ? "#C81D25" : "#344F8F")};
+=======
+  color: ${(props) => (props.situacao == "pendente" ? "#C81D25" : "#344F8F")};
+>>>>>>> murilo
 `;
 
 // CARD SELECT CLINIC

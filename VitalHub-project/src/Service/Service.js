@@ -1,5 +1,5 @@
 
-import axios from "axios";
+import axios from "axios"
 
 //Declarar a aporta da API
 const portaApi = '4466'
@@ -10,7 +10,7 @@ const ipVinicius = '192.168.21.107'
 
 
 //Declarar o ip da maquina
-const ipMurilo = '172.16.39.96'
+const ipMurilo = '192.168.21.127'
 
 //Definir a url padrao
 const apiUrlLocal = `http://${ipVinicius}:${portaApi}/api`
