@@ -21,9 +21,8 @@ export const AppointmentCard = ({
 }) => {
     return (
 
-        <ContainerCardList >
+        <ContainerCardList onPress={onPressQuery}>
 
-            {/* <ProfileImage source={{ uri: "https://github.com/Guidcampos.png" }} /> */}
             <ProfileImage source={source} />
 
             <ContentCard>
@@ -57,7 +56,6 @@ export const AppointmentCard = ({
                             </ButtonCard>
                         ) : (
 
-                            // <ButtonCard onPress={profile !== "Paciente" ? onPressAppointment : () => navigation.replace("ViewPrescription")}>
                             <ButtonCard onPress={onPressAppointment}>
                                 <ButtonTextCard situacao={situacao}>Ver prontuário</ButtonTextCard>
                             </ButtonCard>

@@ -109,6 +109,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                                 // placeholder={consulta.descricao}
                                 fieldValue={consulta.descricao}
                                 keyType="text"
+                                multiline={true}
                             />
 
                             <BoxInputPrescriptionView
@@ -118,6 +119,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                                 // placeholder={consulta.diagnostico}
                                 fieldValue={consulta.diagnostico}
                                 keyType="text"
+                                multiline={true}
                             />
 
                             <BoxInputViewPrescription
@@ -127,6 +129,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                                 // placeholder={consulta.receita.medicamento}
                                 fieldValue={consulta.receita.medicamento}
                                 keyType="text"
+                                multiline={true}
                             />
 
                             <BoxViewImageImport>

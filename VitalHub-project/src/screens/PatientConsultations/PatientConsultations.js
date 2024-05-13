@@ -33,6 +33,8 @@ export const PatientConsultations = ({ navigation, route }) => {
 
   const [consultaSelecionada, setConsultaSelecionada] = useState(null);
 
+  const [consultaMap, setConsultaMap] = useState(null)
+
   const [situacao, setSituacao] = useState("");
 
   const [imageProfile, setImageProfile] = useState(null);
@@ -49,6 +51,7 @@ export const PatientConsultations = ({ navigation, route }) => {
   }
 
   function MostrarModal(modal, consulta) {
+
     setConsultaSelecionada(consulta);
 
     if (modal == "cancelar") {
@@ -142,7 +145,7 @@ export const PatientConsultations = ({ navigation, route }) => {
               source={{uri: item.medicoClinica.medico.idNavigation.foto}}
               navigation={navigation}
               ProfileNameCard={item.medicoClinica.medico.idNavigation.nome}
-              Age={item.medicoClinica.medico.crm}
+              Age={`CRM - ${item.medicoClinica.medico.crm}`}
               TipoConsulta={functionPrioridade(item.prioridade.prioridade)}
               dataConsulta={item.dataConsulta}
             />

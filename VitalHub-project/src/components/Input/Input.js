@@ -70,6 +70,7 @@ export const InputViewPrescription = ({
     keyType,
     placeholderTextColor,
     maxLength,
+    multiline = false
 }) => {
     return(
         <InputViewPrescriptionBox
@@ -79,6 +80,7 @@ export const InputViewPrescription = ({
         onChangeText={onChangeText}
         placeholderTextColor={placeholderTextColor}
         maxLength={maxLength}
+        multiline={multiline}
         />
     )
 }

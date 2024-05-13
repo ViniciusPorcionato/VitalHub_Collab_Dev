@@ -28,6 +28,10 @@ export const SelectDate = ({ navigation, route }) => {
         setShowConfirmModal(true);
     }
 
+    useEffect(()=>{
+        console.log(route.params.agendamento);
+    },[])
+
     return (
         <Container>
 

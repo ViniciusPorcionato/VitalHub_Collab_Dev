@@ -16,7 +16,9 @@ import { mapskey } from '../../Utils/mapsKey';
 export default function Map({latitude, longitude}) {
 
   const mapReference = useRef(null);
+
   const [initialPosition, setInitialPosition] = useState(null);
+
   const[finalPosition, setFinalPosition] = useState({
     latitude: latitude,
     longitude: longitude
@@ -32,20 +34,44 @@ export default function Map({latitude, longitude}) {
     }
   }
 
-  async function RecarregarVizualizacaoMapa(){
-    if (mapReference.current && initialPosition) 
-    {
+  // async function RecarregarVizualizacaoMapa(){
+  //   if (mapReference.current && initialPosition) 
+  //   {
+  //     await mapReference.current.fitToCoordinates(
+  //       [
+  //         {latitude: initialPosition.coords.latitude, longitude: initialPosition.coords.longitude},
+  //         {latitude: finalPosition.latitude, longitude: finalPosition.longitude}
+  //       ],
+  //       {
+  //         edgePadding: {top:60 , right: 60, bottom: 60 , left: 60},
+  //         animated: true
+  //       }
+  //     )
+  //   }
+  // }
+
+  async function RecarregarVizualizacaoMapa() {
+    if (mapReference.current && initialPosition) {
       await mapReference.current.fitToCoordinates(
         [
-          {latitude: initialPosition.coords.latitude, longitude: initialPosition.coords.longitude},
-          {latitude: finalPosition.latitude, longitude: finalPosition.longitude}
+          {
+            latitude: initialPosition.coords.latitude,
+            longitude: initialPosition.coords.longitude
+          },
+          {
+            latitude: finalPosition.latitude,
+            longitude: finalPosition.longitude
+          }
         ],
         {
-          edgePadding: {top:60 , right: 60, bottom: 60 , left: 60},
+          edgePadding: {
+            top: 60, right: 60, bottom: 60, left: 60
+          },
           animated: true
         }
       )
     }
+
   }
 
   useEffect(() => {
@@ -66,10 +92,7 @@ export default function Map({latitude, longitude}) {
         pitch: 60,
         center: response.coords
       })
-
     })
-
-
   }, [100000])
 
   useEffect(() => {
@@ -89,8 +112,8 @@ export default function Map({latitude, longitude}) {
               initialRegion={{
                 latitude: initialPosition.coords.latitude,
                 longitude: initialPosition.coords.longitude,
-                latitudeDelta: 0.001,
-                longitudeDelta: 0.001
+                latitudeDelta: 0.005,
+                longitudeDelta: 0.005
               }}
               provider={PROVIDER_GOOGLE}
               style={styles.map}
@@ -99,25 +122,25 @@ export default function Map({latitude, longitude}) {
 
               <Marker
                 coordinate={{
-                  latitude: -23.615018,
-                  longitude: -46.570744
+                  latitude: initialPosition.coords.latitude,
+                  longitude: initialPosition.coords.longitude
                 }}
-                title='Exemplo de  outro local'
-                description='Qualquer lugar no meu mapa'
-                pinColor='#FF1493'
+                title='Seu local'
+                description='Sua localização'
+                pinColor='#307D7E'
               />
 
               <MapViewDirections
                 origin={initialPosition.coords}
                 destination={{
-                  latitude: -23.629205,
-                  longitude: -46.471853,
+                  latitude: finalPosition.latitude,
+                  longitude: finalPosition.longitude,
                   latitudeDelta: 0.001,
                   longitudeDelta: 0.001
                 }}
                 apikey={mapskey}
                 strokeWidth={5}
-                strokeColor='#00FFFF'
+                strokeColor='#212F3C'
               />
 
               <Marker
@@ -125,9 +148,9 @@ export default function Map({latitude, longitude}) {
                   latitude: finalPosition.latitude,
                   longitude: finalPosition.longitude
                 }}
-                title='Exemplo de  outro local'
-                description='Qualquer lugar no meu mapa'
-                pinColor='#00FF00'
+                title='Clinica'
+                description='Clinica localização'
+                pinColor='#7D312F'
               />
 
             </MapView>

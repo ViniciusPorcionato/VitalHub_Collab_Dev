@@ -57,6 +57,7 @@ export const SelectClinic = ({ navigation, route }) => {
             textCard={item.endereco.logradouro}
             clinica={item}            
             setClinica={setClinica}
+            selected={clinica ? clinica.clinicaId == item.id : false}
           />
         )}
       />
