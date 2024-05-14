@@ -71,6 +71,69 @@ export const AppointmentCard = ({
     )
 }
 
+export const AppointmentCardMed = ({
+    navigation,
+    profile = "Paciente",
+    situacao = "Agendado",
+    onPressCancel,
+    onPressAppointment,
+    onPressAppointmentMed,
+    ProfileNameCard,
+    Age,
+    consultas,
+    TipoConsulta,
+    dataConsulta,
+    source
+}) => {
+    return (
+
+        <ContainerCardList onPress={onPressAppointmentMed}>
+
+            <ProfileImage source={source} />
+
+            <ContentCard>
+
+                <DataProfileCard>
+
+                    <ProfileName>{ProfileNameCard}</ProfileName>
+
+                    <ProfileData>
+                        <TextAge>{Age}</TextAge>
+                        <TextBold>{TipoConsulta}</TextBold>
+                    </ProfileData>
+
+                </DataProfileCard>
+
+                <ViewRow>
+
+                    <ClockCard situacao={situacao}>
+                        <AntDesign name="clockcircle" size={14} color={situacao == "Agendado" ? "#49B3BA" : "#8C8A97"} />
+                        <TextBold situacao={situacao} color={"#49b3ba"}>{moment(dataConsulta).format('HH:mm')}</TextBold>
+                    </ClockCard>
+
+                    {
+                        situacao == "Cancelado" ? (
+                            <>
+                            </>
+                        ) : situacao == "Agendado" ? (
+
+                            <ButtonCard onPress={onPressCancel}>
+                                <ButtonTextCard situacao={situacao}>Cancelar</ButtonTextCard>
+                            </ButtonCard>
+                        ) : (
+
+                            <ButtonCard onPress={onPressAppointment}>
+                                <ButtonTextCard situacao={situacao}>Ver prontuário</ButtonTextCard>
+                            </ButtonCard>
+                        )
+                    }
+                </ViewRow>
+            </ContentCard>
+        </ContainerCardList>
+
+    )
+}
+
 export const SelectMedCard = ({
     textCard,
     onPressCard,

@@ -5,7 +5,7 @@ import { HeaderMed } from "../../components/Header/Header"
 import { FilterAppointment } from "./MedicalConsultationsStyles"
 import { BtnListAppointment } from "../../components/BtnListAppointment/BtnListAppointment"
 import { ListComponent } from "../../components/List/ListStyles"
-import { AppointmentCard } from "../../components/AppointmentCard/AppointmentCard"
+import { AppointmentCard, AppointmentCardMed } from "../../components/AppointmentCard/AppointmentCard"
 import { CancellationModal } from "../../components/CancellationModal/CancellationModal"
 import { AppointmentModal } from "../../components/AppointmentModal/AppointmentModal"
 import api from "../../Service/Service"
@@ -54,7 +54,14 @@ export const MedicalConsultations = ({ navigation }) => {
             setSituacao(consulta.situacao.situacao)
 
         } else{
-            setShowModalAppointment( consulta.situacao.situacao === "Agendado" ? true : false )
+            if(consulta.situacao.situacao === "Agendado"){
+                setShowModalAppointment( true )
+
+            }else{
+                navigation.replace("MedicalRecord", {
+                    consulta: consulta.id
+                });
+            }
         }
     }
 
@@ -133,12 +140,13 @@ export const MedicalConsultations = ({ navigation }) => {
                 renderItem={
                     ({ item }) =>
                         statusLista == item.situacao.situacao && (
-                            <AppointmentCard
+                            <AppointmentCardMed
                                 consultas={item}
                                 situacao={item.situacao.situacao}
                                 profile={"Medico"}
                                 onPressCancel={() => MostrarModal('cancelar', item)}
                                 onPressAppointment={() => MostrarModal('inserirProntuario', item)}
+                                onPressAppointmentMed={() => MostrarModal('inserirProntuario', item)}
                                 source={{uri: item.paciente.idNavigation.foto}}
                                 navigation={navigation}
                                 ProfileNameCard={item.paciente.idNavigation.nome}
@@ -152,7 +160,6 @@ export const MedicalConsultations = ({ navigation }) => {
             />
 
             {/* Modal cancelar */}
-
             <CancellationModal
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
@@ -163,6 +170,7 @@ export const MedicalConsultations = ({ navigation }) => {
 
             {/* Modal ver prontuario */}
             <AppointmentModal
+                setSituacao={setSituacao}
                 consulta={consultaSelecionada}
                 visible={showModalAppointment}
                 setShowModalAppointment={setShowModalAppointment}

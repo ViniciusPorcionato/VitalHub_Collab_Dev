@@ -37,16 +37,6 @@ export const ViewPrescription = ({ navigation, route }) => {
 
         console.log(formData);
 
-        // await api.post(`/Exame/Cadastrar`, formData, {
-        //     "Content-Type": "multipart/form-data"
-        // }).then(response => {
-
-        //     setDescricaoExame(descricaoExame + "/n" + response.data.descricao)
-
-        // }).catch(error => {
-        //     console.log('error');
-        //     console.log(error);
-        // })
 
         try {
             const response = await api.post(`/Exame/Cadastrar`, formData, {
