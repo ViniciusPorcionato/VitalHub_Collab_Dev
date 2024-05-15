@@ -39,8 +39,7 @@ export const AppointmentModal = ({
         console.log(error);
       });
 
-    setShowModalAppointment(false)
-
+    setShowModalAppointment(false);
   };
 
   return (
@@ -64,7 +63,7 @@ export const AppointmentModal = ({
                 } anos`}
               </AppointmentModalText>
               <AppointmentModalText>
-                {`${consulta.paciente.idNavigation.email.substr(0,16)}...`}
+                {`${consulta.paciente.idNavigation.email.substr(0, 16)}...`}
               </AppointmentModalText>
             </ContainerMedicalRecord>
 

@@ -13,17 +13,20 @@ import {
   TitleSelect,
 } from "../../components/Title/TitleStyle";
 import api from "../../Service/Service";
+import { AlertModal } from "../../components/AlertModal/AlertModal";
 
 export const SelectClinic = ({ navigation, route }) => {
-
   const [clinicas, setClinicas] = useState([]);
   const [clinica, setClinica] = useState(null);
+
+  const [showAlertModal, setShowAlertModal] = useState(false);
 
   useEffect(() => {
     async function getClinica() {
       try {
-        const promise = await api.get(`/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`)
-        
+        const promise = await api.get(
+          `/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`
+        );
         setClinicas(promise.data);
       } catch (error) {
         console.log("Deu ruim na API", error);
@@ -32,14 +35,19 @@ export const SelectClinic = ({ navigation, route }) => {
     getClinica();
   }, []);
 
-   function handleContinue(){
-    navigation.replace("SelectMed", {agendamento: {
-      ...route.params.agendamento,
-      ...clinica
-    }})
+  //validação
+  function handleContinue() {
+    if (clinica != null) {
+      navigation.replace("SelectMed", {
+        agendamento: {
+          ...route.params.agendamento,
+          ...clinica,
+        },
+      });
+    } else {
+      setShowAlertModal(true);
+    }
   }
-
-
 
   return (
     <Container>
@@ -50,12 +58,11 @@ export const SelectClinic = ({ navigation, route }) => {
         data={clinicas}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
-
         renderItem={({ item }) => (
           <SelectClinicCard
             ProfileNameCard={item.nomeFantasia}
             textCard={item.endereco.logradouro}
-            clinica={item}            
+            clinica={item}
             setClinica={setClinica}
             selected={clinica ? clinica.clinicaId == item.id : false}
           />
@@ -67,6 +74,12 @@ export const SelectClinic = ({ navigation, route }) => {
       </Button>
 
       <LinkCode onPress={() => navigation.replace("Main")}>Cancelar</LinkCode>
+
+      <AlertModal
+        visible={showAlertModal}
+        setShowAlertModal={setShowAlertModal}
+        AlertAdvise={"Selecione uma clinica"}
+      />
     </Container>
   );
 };

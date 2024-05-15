@@ -1,229 +1,221 @@
-import { AntDesign } from '@expo/vector-icons';
-import { ButtonCard, ButtonTextCard, ClockCard, ContainerCardList, ContainerCardListClinic, ContainerDate, ContainerRate, ContainerRateTime, ContentCard, ContentMedCard, DataClinicCard, DataProfileCard, HourText, ProfileData, ProfileImage, ProfileName, RateText, TextAge, TextBold, TextBoldClinic, ViewRow } from './AppointmentCardStyles';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useState } from 'react';
-import moment from 'moment';
-
+import { AntDesign } from "@expo/vector-icons";
+import {
+  ButtonCard,
+  ButtonTextCard,
+  ClockCard,
+  ContainerCardList,
+  ContainerCardListClinic,
+  ContainerDate,
+  ContainerRate,
+  ContainerRateTime,
+  ContentCard,
+  ContentMedCard,
+  DataClinicCard,
+  DataProfileCard,
+  HourText,
+  ProfileData,
+  ProfileImage,
+  ProfileName,
+  RateText,
+  TextAge,
+  TextBold,
+  TextBoldClinic,
+  ViewRow,
+} from "./AppointmentCardStyles";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useState } from "react";
+import moment from "moment";
 
 export const AppointmentCard = ({
-    navigation,
-    profile = "Paciente",
-    situacao = "Agendado",
-    onPressCancel,
-    onPressAppointment,
-    ProfileNameCard,
-    Age,
-    consultas,
-    TipoConsulta,
-    dataConsulta,
-    onPressQuery, 
-    source
+  navigation,
+  profile = "Paciente",
+  situacao = "Agendado",
+  onPressCancel,
+  onPressAppointment,
+  ProfileNameCard,
+  Age,
+  consultas,
+  TipoConsulta,
+  dataConsulta,
+  onPressQuery,
+  source,
 }) => {
-    return (
+  return (
+    <ContainerCardList onPress={onPressQuery}>
+      <ProfileImage source={source} />
 
-        <ContainerCardList onPress={onPressQuery}>
+      <ContentCard>
+        <DataProfileCard>
+          <ProfileName>{ProfileNameCard}</ProfileName>
 
-            <ProfileImage source={source} />
+          <ProfileData>
+            <TextAge>{Age}</TextAge>
+            <TextBold>{TipoConsulta}</TextBold>
+          </ProfileData>
+        </DataProfileCard>
 
-            <ContentCard>
+        <ViewRow>
+          <ClockCard situacao={situacao}>
+            <AntDesign
+              name="clockcircle"
+              size={14}
+              color={situacao == "Agendado" ? "#49B3BA" : "#8C8A97"}
+            />
+            <TextBold situacao={situacao} color={"#49b3ba"}>
+              {moment(dataConsulta).format("HH:mm")}
+            </TextBold>
+          </ClockCard>
 
-                <DataProfileCard>
-
-                    <ProfileName>{ProfileNameCard}</ProfileName>
-
-                    <ProfileData>
-                        <TextAge>{Age}</TextAge>
-                        <TextBold>{TipoConsulta}</TextBold>
-                    </ProfileData>
-
-                </DataProfileCard>
-
-                <ViewRow>
-
-                    <ClockCard situacao={situacao}>
-                        <AntDesign name="clockcircle" size={14} color={situacao == "Agendado" ? "#49B3BA" : "#8C8A97"} />
-                        <TextBold situacao={situacao} color={"#49b3ba"}>{moment(dataConsulta).format('HH:mm')}</TextBold>
-                    </ClockCard>
-
-                    {
-                        situacao == "Cancelado" ? (
-                            <>
-                            </>
-                        ) : situacao == "Agendado" ? (
-
-                            <ButtonCard onPress={onPressCancel}>
-                                <ButtonTextCard situacao={situacao}>Cancelar</ButtonTextCard>
-                            </ButtonCard>
-                        ) : (
-
-                            <ButtonCard onPress={onPressAppointment}>
-                                <ButtonTextCard situacao={situacao}>Ver prontuário</ButtonTextCard>
-                            </ButtonCard>
-                        )
-                    }
-
-                </ViewRow>
-
-            </ContentCard>
-
-        </ContainerCardList>
-
-    )
-}
+          {situacao == "Cancelado" ? (
+            <></>
+          ) : situacao == "Agendado" ? (
+            <ButtonCard onPress={onPressCancel}>
+              <ButtonTextCard situacao={situacao}>Cancelar</ButtonTextCard>
+            </ButtonCard>
+          ) : (
+            <ButtonCard onPress={onPressAppointment}>
+              <ButtonTextCard situacao={situacao}>
+                Ver prontuário
+              </ButtonTextCard>
+            </ButtonCard>
+          )}
+        </ViewRow>
+      </ContentCard>
+    </ContainerCardList>
+  );
+};
 
 export const AppointmentCardMed = ({
-    navigation,
-    profile = "Paciente",
-    situacao = "Agendado",
-    onPressCancel,
-    onPressAppointment,
-    onPressAppointmentMed,
-    ProfileNameCard,
-    Age,
-    consultas,
-    TipoConsulta,
-    dataConsulta,
-    source
+  navigation,
+  profile = "Paciente",
+  situacao = "Agendado",
+  onPressCancel,
+  onPressAppointment,
+  onPressAppointmentMed,
+  ProfileNameCard,
+  Age,
+  consultas,
+  TipoConsulta,
+  dataConsulta,
+  source,
 }) => {
-    return (
+  return (
+    <ContainerCardList onPress={onPressAppointmentMed}>
+      <ProfileImage source={source} />
 
-        <ContainerCardList onPress={onPressAppointmentMed}>
+      <ContentCard>
+        <DataProfileCard>
+          <ProfileName>{ProfileNameCard}</ProfileName>
 
-            <ProfileImage source={source} />
+          <ProfileData>
+            <TextAge>{Age}</TextAge>
+            <TextBold>{TipoConsulta}</TextBold>
+          </ProfileData>
+        </DataProfileCard>
 
-            <ContentCard>
+        <ViewRow>
+          <ClockCard situacao={situacao}>
+            <AntDesign
+              name="clockcircle"
+              size={14}
+              color={situacao == "Agendado" ? "#49B3BA" : "#8C8A97"}
+            />
+            <TextBold situacao={situacao} color={"#49b3ba"}>
+              {moment(dataConsulta).format("HH:mm")}
+            </TextBold>
+          </ClockCard>
 
-                <DataProfileCard>
-
-                    <ProfileName>{ProfileNameCard}</ProfileName>
-
-                    <ProfileData>
-                        <TextAge>{Age}</TextAge>
-                        <TextBold>{TipoConsulta}</TextBold>
-                    </ProfileData>
-
-                </DataProfileCard>
-
-                <ViewRow>
-
-                    <ClockCard situacao={situacao}>
-                        <AntDesign name="clockcircle" size={14} color={situacao == "Agendado" ? "#49B3BA" : "#8C8A97"} />
-                        <TextBold situacao={situacao} color={"#49b3ba"}>{moment(dataConsulta).format('HH:mm')}</TextBold>
-                    </ClockCard>
-
-                    {
-                        situacao == "Cancelado" ? (
-                            <>
-                            </>
-                        ) : situacao == "Agendado" ? (
-
-                            <ButtonCard onPress={onPressCancel}>
-                                <ButtonTextCard situacao={situacao}>Cancelar</ButtonTextCard>
-                            </ButtonCard>
-                        ) : (
-
-                            <ButtonCard onPress={onPressAppointment}>
-                                <ButtonTextCard situacao={situacao}>Ver prontuário</ButtonTextCard>
-                            </ButtonCard>
-                        )
-                    }
-                </ViewRow>
-            </ContentCard>
-        </ContainerCardList>
-
-    )
-}
+          {situacao == "Cancelado" ? (
+            <></>
+          ) : situacao == "Agendado" ? (
+            <ButtonCard onPress={onPressCancel}>
+              <ButtonTextCard situacao={situacao}>Cancelar</ButtonTextCard>
+            </ButtonCard>
+          ) : (
+            <ButtonCard onPress={onPressAppointment}>
+              <ButtonTextCard situacao={situacao}>
+                Ver prontuário
+              </ButtonTextCard>
+            </ButtonCard>
+          )}
+        </ViewRow>
+      </ContentCard>
+    </ContainerCardList>
+  );
+};
 
 export const SelectMedCard = ({
-    textCard,
-    onPressCard,
-    ProfileNameCard,
-    imageUrl,
-    medico,
-    selected,
-    setMedico
+  textCard,
+  onPressCard,
+  ProfileNameCard,
+  imageUrl,
+  medico,
+  selected,
+  setMedico,
 }) => {
-    return (
+  return (
+    <ContainerCardList
+      selected={selected}
+      onPress={() =>
+        setMedico({
+          medicoClinicaId: medico.id,
+          medicoNome: medico.idNavigation.nome,
+          medicoEspecialidade: medico.especialidade.especialidade1,
+        })
+      }
+    >
+      <ProfileImage source={imageUrl} />
 
-        <ContainerCardList
-            selected={selected}
-            onPress={() => setMedico({
-                medicoClinicaId: medico.id,
-                medicoNome: medico.idNavigation.nome,
-                medicoEspecialidade: medico.especialidade.especialidade1
-            })}
-        >
-
-            <ProfileImage source={imageUrl} />
-
-            <ContentMedCard>
-                <DataProfileCard>
-                    <ProfileName>{ProfileNameCard}</ProfileName>
-                    <ProfileData>
-                        <TextBold>{textCard}</TextBold>
-                    </ProfileData>
-                </DataProfileCard>
-            </ContentMedCard>
-        </ContainerCardList>
-
-    )
-}
+      <ContentMedCard>
+        <DataProfileCard>
+          <ProfileName>{ProfileNameCard}</ProfileName>
+          <ProfileData>
+            <TextBold>{textCard}</TextBold>
+          </ProfileData>
+        </DataProfileCard>
+      </ContentMedCard>
+    </ContainerCardList>
+  );
+};
 
 export const SelectClinicCard = ({
-    textCard,
-   
-    onPressCard,
-    ProfileNameCard,
-    rate,
-    openTime,
-    clinica,
-    setClinica,
-    selected
+  textCard,
+
+  onPressCard,
+  ProfileNameCard,
+  rate,
+  openTime,
+  clinica,
+  setClinica,
+  selected,
 }) => {
-    return (
+  return (
+    <ContainerCardListClinic
+      selected={selected}
+      onPress={() =>
+        setClinica({
+          clinicaId: clinica.id,
+          clinicaLabel: clinica.nomeFantasia,
+        })
+      }
+    >
+      <ContentMedCard>
+        <DataClinicCard>
+          <ProfileName>{ProfileNameCard}</ProfileName>
 
-        <ContainerCardListClinic
-            selected={selected}
-            onPress={() => setClinica({
-                clinicaId: clinica.id,
-                clinicaLabel: clinica.nomeFantasia
-            })}>
+          <ProfileData>
+            <TextBoldClinic>{textCard}</TextBoldClinic>
+          </ProfileData>
+        </DataClinicCard>
+      </ContentMedCard>
 
+      <ContainerRateTime>
+        <ContainerRate>
 
-            <ContentMedCard>
-
-                <DataClinicCard>
-
-                    <ProfileName>{ProfileNameCard}</ProfileName>
-
-                    <ProfileData>
-                        <TextBoldClinic>{textCard}</TextBoldClinic>
-                    </ProfileData>
-
-                </DataClinicCard>
-
-            </ContentMedCard>
-
-            <ContainerRateTime>
-
-                <ContainerRate>
-                    <AntDesign name="star" size={20} color="#F9A620" />
-
-                    <RateText>{rate}</RateText>
-                </ContainerRate>
-
-                <ContainerDate>
-
-                    <MaterialCommunityIcons name="calendar-outline" size={15} color="#49B3BA" />
-
-                    <HourText>{openTime}</HourText>
-
-                </ContainerDate>
-
-            </ContainerRateTime>
-
-
-        </ContainerCardListClinic>
-
-    )
-}
+          <RateText>{rate}</RateText>
+        </ContainerRate>
+        
+      </ContainerRateTime>
+    </ContainerCardListClinic>
+  );
+};

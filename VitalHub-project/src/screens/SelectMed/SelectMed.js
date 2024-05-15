@@ -10,11 +10,15 @@ import {
   TitleSelect,
 } from "../../components/Title/TitleStyle";
 import api from "../../Service/Service";
+import { AlertModal } from "../../components/AlertModal/AlertModal";
 
 export const SelectMed = ({ navigation, route }) => {
   //Criar o state para receber a lista de médico (Array)
   const [medicos, setMedicos] = useState([]);
+
   const [medico, setMedico] = useState(null);
+
+  const [showAlertModal, setShowAlertModal] = useState(false);
 
   //Criar um useEffect para a chamda da função
   useEffect(() => {
@@ -37,13 +41,18 @@ export const SelectMed = ({ navigation, route }) => {
     // console.log(medico);
   }, []);
 
+  //validação
   function handleContinue() {
-    navigation.replace("SelectDate", {
-      agendamento: {
-        ...route.params.agendamento,
-        ...medico,
-      },
-    });
+    if (medico) {
+      navigation.replace("SelectDate", {
+        agendamento: {
+          ...route.params.agendamento,
+          ...medico,
+        },
+      });
+    } else {
+      setShowAlertModal(true);
+    }
   }
 
   return (
@@ -72,6 +81,12 @@ export const SelectMed = ({ navigation, route }) => {
       </Button>
 
       <LinkCode onPress={() => navigation.replace("Main")}>Cancelar</LinkCode>
+
+      <AlertModal
+        visible={showAlertModal}
+        setShowAlertModal={setShowAlertModal}
+        AlertAdvise={"Selecione uma Medico"}
+      />
     </Container>
   );
 };

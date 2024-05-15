@@ -10,6 +10,7 @@ import {
   Title,
 } from "../../components/Title/TitleStyle";
 import api from "../../Service/Service";
+import { AlertModal } from "../../components/AlertModal/AlertModal";
 
 export const CreateAccount = ({ navigation }) => {
   const [nomeUsuario, setNomeUsuario] = useState("");
@@ -20,13 +21,15 @@ export const CreateAccount = ({ navigation }) => {
     "4A747BF0-F985-4822-9BD0-2067D7277885"
   );
 
+  const [showAlertModal, setShowAlertModal] = useState(false);
+
   async function cadastrar(verificarSenha, senha) {
     if (email === "") {
-      Alert.alert("Erro", "Preencher o campo email");
+      setShowAlertModal(true)
     } else if (senha === "") {
-      Alert.alert("Erro", "Preencher o campo senha");
+      setShowAlertModal(true)
     } else if (verificarSenha === "") {
-      Alert.alert("Erro", "Preencher o campo confirmar senha");
+      setShowAlertModal(true)
     } else if (verificarSenha === senha) {
       try {
         await api.post("/Pacientes", {
@@ -94,6 +97,13 @@ export const CreateAccount = ({ navigation }) => {
       </Button>
 
       <LinkCode onPress={() => navigation.replace("Login")}>Cancelar</LinkCode>
+
+      <AlertModal
+        visible={showAlertModal}
+        setShowAlertModal={setShowAlertModal}
+        AlertAdvise={"Campos Preenchidos Incorretamente ! "}
+      />
+
     </Container>
   );
 };

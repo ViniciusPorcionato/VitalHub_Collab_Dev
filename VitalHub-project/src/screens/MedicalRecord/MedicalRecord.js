@@ -30,13 +30,12 @@ export const MedicalRecord = ({ navigation, route }) => {
   const [diagnostico, setDiagnostico] = useState("");
   const [prescricao, setPrescricao] = useState("");
   const [editable, setEditable] = useState(false);
-  
-  const [idConsulta, setIdConsulta] = useState(route.params.consulta)
+
+  const [idConsulta, setIdConsulta] = useState(route.params.consulta);
 
   useEffect(() => {
     console.log(route);
   }, [route]);
-
 
   async function HandleUpdate() {
     await api
@@ -56,7 +55,8 @@ export const MedicalRecord = ({ navigation, route }) => {
   }
 
   async function GetProntuario() {
-    await api.get(`/Consultas/BuscarPorId?id=${idConsulta}`)
+    await api
+      .get(`/Consultas/BuscarPorId?id=${idConsulta}`)
       .then((response) => {
         setConsulta(response.data);
         console.log(consulta);
@@ -78,7 +78,7 @@ export const MedicalRecord = ({ navigation, route }) => {
     <ScrollProfile>
       {consulta ? (
         <Container>
-          <UserImage source={{uri: consulta.paciente.idNavigation.foto}} />
+          <UserImage source={{ uri: consulta.paciente.idNavigation.foto }} />
 
           <TitleProfile>{consulta.paciente.idNavigation.nome}</TitleProfile>
 
@@ -89,7 +89,7 @@ export const MedicalRecord = ({ navigation, route }) => {
             } anos`}</SubtitleMedicalRecord>
 
             <SubtitleMedicalRecord>
-              {`${consulta.paciente.idNavigation.email.substr(0,16)}...`}
+              {`${consulta.paciente.idNavigation.email.substr(0, 16)}...`}
             </SubtitleMedicalRecord>
           </ContainerMedicalRecord>
 

@@ -57,10 +57,10 @@ export const ViewPrescription = ({ navigation, route }) => {
         getConsulta();
     }, [])
 
-    useEffect(() => {
-        console.log('route');
-        console.log(route);
-    }, [route])
+    // useEffect(() => {
+    //     console.log('route');
+    //     console.log(route);
+    // }, [route])
 
     useEffect(() => {
         if (route.params != null) {
