@@ -34,18 +34,7 @@ export const CameraPrescription = ({ navigation }) => {
     }
   }
 
-  async function UploadPhoto() {
 
-    console.log(photo);
-
-    navigation.navigate("ViewPrescription", { photoUri: photo })
-
-    // await MediaLibrary.createAssetAsync(photo).then(() => {
-    //   alert('Foto salva com sucesso')
-    // }).catch(error => {
-    //   alert('Não foi possivel salvar a foto')
-    // })
-  }
 
   function ClearPhoto() {
     setPhoto(null)
